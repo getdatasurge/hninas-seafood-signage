@@ -258,6 +258,63 @@
       margin-top: 0;
     }
 
+    /* Overview column — condensed text for full menu */
+    .overview-section {
+      padding: 18px 28px;
+    }
+
+    .overview-cat {
+      margin-bottom: 12px;
+    }
+
+    .overview-cat:last-child {
+      margin-bottom: 0;
+    }
+
+    .overview-section .cat-header {
+      font-size: 22px;
+      padding-bottom: 5px;
+      margin-bottom: 6px;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .overview-section .cat-sub {
+      font-size: 11px;
+      margin-top: -4px;
+      margin-bottom: 5px;
+    }
+
+    .overview-section .items-list {
+      gap: 3px;
+    }
+
+    .overview-section .item-name {
+      font-size: 15px;
+    }
+
+    .overview-section .item-dots {
+      min-width: 8px;
+      border-bottom: 1px dotted rgba(255,255,255,0.1);
+      margin-bottom: 3px;
+    }
+
+    .overview-section .item-price {
+      font-size: 17px;
+    }
+
+    .overview-section .item-desc {
+      font-size: 10px;
+      margin-top: -1px;
+      margin-bottom: 0;
+    }
+
+    .overview-footnote {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 8px;
+    }
+
     /* Page indicator bar at bottom of column */
     .col-indicator {
       position: absolute;
@@ -452,345 +509,372 @@
       </div>
     </header>
 
-    <!-- ═══════ LEFT COLUMN — rotates through sections ═══════ -->
+    <!-- ═══════ LEFT COLUMN — Full Menu Overview ═══════ -->
     <div class="menu-column" id="colLeft">
 
-      <!-- Section 1: Build A Combo -->
-      <div class="column-section active" data-col="left">
-        <div class="cat-header">Build A Combo</div>
-        <div class="cat-sub">All combos served with corn &amp; potatoes</div>
-        <div class="items-list">
-          <div class="menu-item">
-            <span class="item-name">Snow Crab Cluster</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$22</span>
+      <!-- Page 1: Appetizers + Build a Combo -->
+      <div class="column-section overview-section active" data-col="left">
+        <div class="overview-cat">
+          <div class="cat-header">Appetizers</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">Mozzarella Sticks</span><span class="item-dots"></span><span class="item-price">$6</span></div>
+            <div class="menu-item"><span class="item-name">6 Wings</span><span class="item-dots"></span><span class="item-price">$13</span></div>
+            <div class="menu-item"><span class="item-name">10 Wings</span><span class="item-dots"></span><span class="item-price">$19.50</span></div>
+            <div class="menu-item"><span class="item-name">20 Wings</span><span class="item-dots"></span><span class="item-price">$36.40</span></div>
+            <div class="menu-item"><span class="item-name">Chicken Strips w/ FF</span><span class="item-dots"></span><span class="item-price">$15</span></div>
           </div>
-          <div class="menu-item">
-            <span class="item-name">3 Lobster Tails</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$22</span>
+        </div>
+        <div class="overview-cat">
+          <div class="cat-header">Build A Combo</div>
+          <div class="cat-sub">Served with Corn and Potatoes</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">10 Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$12</span></div>
+            <div class="menu-item"><span class="item-name">20 Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$22</span></div>
+            <div class="menu-item"><span class="item-name">1 LB Crawfish</span><span class="item-dots"></span><span class="item-price">$16</span></div>
+            <div class="menu-item"><span class="item-name">Clams (Steamed)</span><span class="item-dots"></span><span class="item-price">$15</span></div>
+            <div class="menu-item"><span class="item-name">Green Mussels</span><span class="item-dots"></span><span class="item-price">$16</span></div>
+            <div class="menu-item"><span class="item-name">Black Mussels (1 lb)</span><span class="item-dots"></span><span class="item-price">$16</span></div>
+            <div class="menu-item"><span class="item-name">Snow Crab Cluster</span><span class="item-dots"></span><span class="item-price">$22</span></div>
+            <div class="menu-item"><span class="item-name">4oz Lobster Tail</span><span class="item-dots"></span><span class="item-price">$18</span></div>
+            <div class="menu-item"><span class="item-name">(3) 4oz Lobster Tails</span><span class="item-dots"></span><span class="item-price">$45</span></div>
+            <div class="menu-item"><span class="item-name">Steamed Snapper</span><span class="item-dots"></span><span class="item-price">$18–$20</span></div>
           </div>
-          <div class="menu-item">
-            <span class="item-name">1 lb Crawfish + 10 Jumbo Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$32</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Snow Crab + Lobster Tail</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$32</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Whole Lobster Combo</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$35</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Blue Crab Combo (3 Crabs)</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$40</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">3 Cold Water Lobster Tails</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$45</span>
-          </div>
-          <div class="item-desc">Cold water tails in garlic butter &amp; seasoning</div>
-          <div class="menu-item">
-            <span class="item-name">Dungeness Crab Combo</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$45</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">King Crab Legs (1 lb)</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$60</span>
-          </div>
-          <div class="item-desc">Premium king crab w/ corn &amp; potato</div>
         </div>
       </div>
 
-      <!-- Section 2: Garlic Shrimp Combos -->
-      <div class="column-section" data-col="left">
-        <div class="cat-header">Garlic Shrimp Combos</div>
-        <img class="cat-image" src="media/food/482204665_1175274780967780_65374385545676278_n.jpg" alt="Garlic Shrimp">
-        <div class="items-list">
-          <div class="menu-item">
-            <span class="item-name">10 Jumbo Garlic Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$15</span>
+      <!-- Page 2: Garlic Shrimp + Garlic Combos Part 1 -->
+      <div class="column-section overview-section" data-col="left">
+        <div class="overview-cat">
+          <div class="cat-header">Garlic Shrimp Combos</div>
+          <div class="cat-sub">Old Bay &amp; Cajun spices</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">10 Jumbo Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$13</span></div>
+            <div class="menu-item"><span class="item-name">10 Garlic Shrimp Combo (Works)</span><span class="item-dots"></span><span class="item-price">$21</span></div>
+            <div class="menu-item"><span class="item-name">20 Jumbo Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$22</span></div>
+            <div class="menu-item"><span class="item-name">20 Shrimp Combo (Works)</span><span class="item-dots"></span><span class="item-price">$31</span></div>
+            <div class="menu-item"><span class="item-name">30 Jumbo Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$33</span></div>
+            <div class="menu-item"><span class="item-name">8 Shrimp / Broccoli / Rice</span><span class="item-dots"></span><span class="item-price">$15</span></div>
+            <div class="menu-item"><span class="item-name">16 Shrimp / Broccoli / Rice</span><span class="item-dots"></span><span class="item-price">$24</span></div>
           </div>
-          <div class="item-desc">Served with corn &amp; potato</div>
-          <div class="menu-item">
-            <span class="item-name">20 Jumbo Garlic Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$26</span>
+        </div>
+        <div class="overview-cat">
+          <div class="cat-header">Garlic Combos</div>
+          <div class="cat-sub">All served with Corn &amp; Potatoes</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">3 Med Blue Crab</span><span class="item-dots"></span><span class="item-price">$22</span></div>
+            <div class="menu-item"><span class="item-name">3 Large Blue Crab</span><span class="item-dots"></span><span class="item-price">$31</span></div>
+            <div class="menu-item"><span class="item-name">3 XL Blue Crab</span><span class="item-dots"></span><span class="item-price">$35</span></div>
+            <div class="menu-item"><span class="item-name">6 Blue Crabs</span><span class="item-dots"></span><span class="item-price">$43</span></div>
+            <div class="menu-item"><span class="item-name">6 Large Crabs</span><span class="item-dots"></span><span class="item-price">$58</span></div>
+            <div class="menu-item"><span class="item-name">3 Blue Crab Combo</span><span class="item-dots"></span><span class="item-price">$31</span></div>
+            <div class="menu-item"><span class="item-name">3 Lg Crab &amp; 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$40</span></div>
+            <div class="menu-item"><span class="item-name">6 Med Crab &amp; 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$50</span></div>
           </div>
-          <div class="item-desc">Served with corn &amp; potato</div>
-          <div class="menu-item">
-            <span class="item-name">30 Jumbo Garlic Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$35</span>
-          </div>
-          <div class="item-desc">Served with corn &amp; potato</div>
-          <div class="menu-item">
-            <span class="item-name">Salmon Steamed</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$9.99</span>
-          </div>
-          <div class="item-desc">With corn &amp; potato</div>
         </div>
       </div>
 
-      <!-- Section 3: Family Combos -->
-      <div class="column-section" data-col="left">
-        <div class="cat-header">Family Combos</div>
-        <div class="cat-sub">Perfect for sharing — feeds 2-4</div>
-        <div class="items-list">
-          <div class="menu-item">
-            <span class="item-name">2 Snow Crab + 30 Med Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$46</span>
+      <!-- Page 3: Garlic Combos Part 2 + Fried Platters -->
+      <div class="column-section overview-section" data-col="left">
+        <div class="overview-cat">
+          <div class="cat-header">Garlic Combos (cont.)</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">6 Lg Crabs &amp; 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$67</span></div>
+            <div class="menu-item"><span class="item-name">1 lb Crawfish &amp; 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$26</span></div>
+            <div class="menu-item"><span class="item-name">2 LB Crawfish</span><span class="item-dots"></span><span class="item-price">$29</span></div>
+            <div class="menu-item"><span class="item-name">Snow &amp; Dungeness Combo</span><span class="item-dots"></span><span class="item-price">$58</span></div>
+            <div class="menu-item"><span class="item-name">1 Snow Crab &amp; 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$31</span></div>
+            <div class="menu-item"><span class="item-name">2 Snow Crab Clusters</span><span class="item-dots"></span><span class="item-price">$42</span></div>
+            <div class="menu-item"><span class="item-name">1 Dungeness Combo</span><span class="item-dots"></span><span class="item-price">$31</span></div>
+            <div class="menu-item"><span class="item-name">2 Dungeness Clusters</span><span class="item-dots"></span><span class="item-price">$42</span></div>
+            <div class="menu-item"><span class="item-name">2 Dungeness &amp; 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$50</span></div>
+            <div class="menu-item"><span class="item-name">10 Shrimp &amp; 2 Lobster Tails</span><span class="item-dots"></span><span class="item-price">$40</span></div>
+            <div class="menu-item"><span class="item-name">King Crab &amp; 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$60</span></div>
+            <div class="menu-item"><span class="item-name">Snow &amp; Crawfish Combo</span><span class="item-dots"></span><span class="item-price">$43.50</span></div>
+            <div class="menu-item"><span class="item-name">10 Garlic &amp; 10 Fried Shrimp</span><span class="item-dots"></span><span class="item-price">$25</span></div>
+            <div class="menu-item"><span class="item-name">20 Garlic &amp; 20 Fried Shrimp</span><span class="item-dots"></span><span class="item-price">$50</span></div>
           </div>
-          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
-          <div class="menu-item">
-            <span class="item-name">2 Snow Crab + 10 Garlic Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$45</span>
-          </div>
-          <div class="item-desc">w/ Corn &amp; Potato</div>
-          <div class="menu-item">
-            <span class="item-name">12 Med Crab + 30 Med Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$49.99</span>
-          </div>
-          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
-          <div class="menu-item">
-            <span class="item-name">2 Snow Crab + 1 lb Crawfish</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$55</span>
-          </div>
-          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
-          <div class="menu-item">
-            <span class="item-name">Snow Crab + Lobster + 10 Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$58</span>
-          </div>
-          <div class="item-desc">w/ Corn &amp; Potato</div>
-          <div class="menu-item">
-            <span class="item-name">6 Blue Crab + 10 Garlic Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$65</span>
-          </div>
-          <div class="item-desc">w/ Corn &amp; Potato</div>
-          <div class="menu-item">
-            <span class="item-name">6 Blue Crab + 30 Med Shrimp</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$70</span>
-          </div>
-          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
         </div>
       </div>
 
-      <!-- Section 4: Steamed Seafood -->
-      <div class="column-section" data-col="left">
-        <img class="cat-image" src="media/food/rf31-Hninas-Seafood-meat-2023-04-4.jpg" alt="Steamed Seafood">
-        <div class="cat-header">Steamed Seafood</div>
-        <div class="items-list">
-          <div class="menu-item">
-            <span class="item-name">Steamed Shrimp (1 lb)</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$14</span>
+      <!-- Page 4: Fried Platters + Lunch + Family + Sides -->
+      <div class="column-section overview-section" data-col="left">
+        <div class="overview-cat">
+          <div class="cat-header">Fried Platters</div>
+          <div class="cat-sub">w/ French Fries or Hushpuppies</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">10 Fried Shrimp</span><span class="item-dots"></span><span class="item-price">$14</span></div>
+            <div class="menu-item"><span class="item-name">15 Fried Shrimp</span><span class="item-dots"></span><span class="item-price">$20</span></div>
+            <div class="menu-item"><span class="item-name">20 Fried Shrimp</span><span class="item-dots"></span><span class="item-price">$25</span></div>
+            <div class="menu-item"><span class="item-name">Fried Snapper</span><span class="item-dots"></span><span class="item-price">$15 / $28</span></div>
+            <div class="menu-item"><span class="item-name">Fried Grouper</span><span class="item-dots"></span><span class="item-price">$17 / $29</span></div>
+            <div class="menu-item"><span class="item-name">Fried Catfish (2 Filets)</span><span class="item-dots"></span><span class="item-price">$15</span></div>
+            <div class="menu-item"><span class="item-name">Fried Tilapia (2 Filets)</span><span class="item-dots"></span><span class="item-price">$14</span></div>
+            <div class="menu-item"><span class="item-name">Fried Redfish</span><span class="item-dots"></span><span class="item-price">$15 / $24</span></div>
+            <div class="menu-item"><span class="item-name">1/2 Catfish &amp; 5 Shrimp</span><span class="item-dots"></span><span class="item-price">$15</span></div>
+            <div class="menu-item"><span class="item-name">Snapper + 5 Fried Shrimp</span><span class="item-dots"></span><span class="item-price">$21</span></div>
           </div>
-          <div class="item-desc">Old bay seasoned w/ corn &amp; potato</div>
-          <div class="menu-item">
-            <span class="item-name">Steamed Snow Crab (1 Cluster)</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$22</span>
+        </div>
+        <div class="overview-cat">
+          <div class="cat-header">Family Combo</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">Crawfish Crazy</span><span class="item-dots"></span><span class="item-price">$120</span></div>
+            <div class="item-desc">5 lbs crawfish, 30 shrimp, 3 C&amp;P, 6 eggs, 2 sausages</div>
           </div>
-          <div class="menu-item">
-            <span class="item-name">Steamed Blue Crab (6 pcs)</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$40</span>
+        </div>
+      </div>
+
+      <!-- Page 5: Lunch + Sides & Drinks -->
+      <div class="column-section overview-section" data-col="left">
+        <div class="overview-cat">
+          <div class="cat-header">Lunch Menu</div>
+          <div class="cat-sub">Until 2PM &mdash; *Subject to change based on availability</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">8 Shrimp / Corn &amp; Potato</span><span class="item-dots"></span><span class="item-price">$10</span></div>
+            <div class="menu-item"><span class="item-name">1 lb Crawfish / Corn &amp; Potato</span><span class="item-dots"></span><span class="item-price">$13</span></div>
+            <div class="menu-item"><span class="item-name">1 Snow Crab / Corn &amp; Potato</span><span class="item-dots"></span><span class="item-price">$20</span></div>
+            <div class="menu-item"><span class="item-name">1 Snow Crab / 8 Shrimp / C&amp;P</span><span class="item-dots"></span><span class="item-price">$27</span></div>
+            <div class="menu-item"><span class="item-name">8 Fried Shrimp</span><span class="item-dots"></span><span class="item-price">$10</span></div>
+            <div class="menu-item"><span class="item-name">8 oz Snapper Filet</span><span class="item-dots"></span><span class="item-price">$13</span></div>
+            <div class="menu-item"><span class="item-name">6 Wings</span><span class="item-dots"></span><span class="item-price">$10</span></div>
           </div>
-          <div class="menu-item">
-            <span class="item-name">Crawfish (1 lb)</span>
-            <span class="item-dots"></span>
-            <span class="item-price">$12</span>
+        </div>
+        <div class="overview-cat">
+          <div class="cat-header">Sides &amp; Drinks</div>
+          <div class="items-list">
+            <div class="menu-item"><span class="item-name">Corn &amp; Potato</span><span class="item-dots"></span><span class="item-price">$6</span></div>
+            <div class="menu-item"><span class="item-name">Potatoes</span><span class="item-dots"></span><span class="item-price">$5.50</span></div>
+            <div class="menu-item"><span class="item-name">Smoked Sausage</span><span class="item-dots"></span><span class="item-price">$7</span></div>
+            <div class="menu-item"><span class="item-name">Hush Puppies (Full)</span><span class="item-dots"></span><span class="item-price">$5</span></div>
+            <div class="menu-item"><span class="item-name">Garlic Eggs</span><span class="item-dots"></span><span class="item-price">Ask</span></div>
+            <div class="menu-item"><span class="item-name">Bottle Soda</span><span class="item-dots"></span><span class="item-price">$3.89</span></div>
+            <div class="menu-item"><span class="item-name">Powerade</span><span class="item-dots"></span><span class="item-price">$3.24+</span></div>
+            <div class="menu-item"><span class="item-name">Water Bottle</span><span class="item-dots"></span><span class="item-price">$2.20</span></div>
           </div>
-          <div class="item-desc">Seasoned w/ corn &amp; potato</div>
         </div>
       </div>
 
       <div class="col-indicator" id="indicatorLeft"></div>
     </div>
 
-    <!-- ═══════ RIGHT COLUMN — rotates through sections ═══════ -->
+    <!-- ═══════ RIGHT COLUMN — Detailed Featured View ═══════ -->
     <div class="menu-column" id="colRight">
 
-      <!-- Section 1: Fried Platters -->
+      <!-- Featured 1: Build A Combo -->
       <div class="column-section active" data-col="right">
-        <img class="cat-image" src="media/food/r772-Hninas-Seafood-meat-2023-04-2.jpg" alt="Fried Seafood">
-        <div class="cat-header">Fried Platters</div>
+        <img class="cat-image" src="media/food/rf31-Hninas-Seafood-meat-2023-04-4.jpg" alt="Build A Combo">
+        <div class="cat-header">Build A Combo</div>
+        <div class="cat-sub">Served with Corn and Potatoes</div>
         <div class="items-list">
           <div class="menu-item">
-            <span class="item-name">10 Fried Jumbo Shrimp</span>
+            <span class="item-name">10 Garlic Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$12</span>
+          </div>
+          <div class="item-desc">Garlic butter and Old Bay</div>
+          <div class="menu-item">
+            <span class="item-name">1 LB Crawfish</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$16</span>
+          </div>
+          <div class="item-desc">Louisiana Crawfish, garlic butter</div>
+          <div class="menu-item">
+            <span class="item-name">Snow Crab Cluster</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$22</span>
+          </div>
+          <div class="item-desc">Large Snow Crab Cluster</div>
+          <div class="menu-item">
+            <span class="item-name">4oz Lobster Tail</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$18</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">(3) 4oz Lobster Tails</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$45</span>
+          </div>
+          <div class="item-desc">Cold Water Lobster Tails in Garlic Butter</div>
+          <div class="menu-item">
+            <span class="item-name">Steamed Snapper</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$18–$20</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured 2: Garlic Shrimp Combos -->
+      <div class="column-section" data-col="right">
+        <img class="cat-image" src="media/food/482204665_1175274780967780_65374385545676278_n.jpg" alt="Garlic Shrimp">
+        <div class="cat-header">Garlic Shrimp Combos</div>
+        <div class="cat-sub">Jumbo Garlic Shrimp cooked with Old Bay &amp; Cajun spices</div>
+        <div class="items-list">
+          <div class="menu-item">
+            <span class="item-name">10 Jumbo Garlic Shrimp</span>
             <span class="item-dots"></span>
             <span class="item-price">$13</span>
           </div>
-          <div class="item-desc">Served with french fries</div>
+          <div class="item-desc">with Corn &amp; Potatoes</div>
           <div class="menu-item">
-            <span class="item-name">Fried Fish Platter (Whiting)</span>
+            <span class="item-name">10 Garlic Shrimp Combo</span>
             <span class="item-dots"></span>
-            <span class="item-price">$10.99</span>
+            <span class="item-price">$21</span>
           </div>
-          <div class="item-desc">Served with french fries</div>
+          <div class="item-desc">with the works: Corn, Potatoes, 3 Eggs &amp; Sausage</div>
           <div class="menu-item">
-            <span class="item-name">Fried Tilapia Platter</span>
+            <span class="item-name">20 Jumbo Garlic Shrimp</span>
             <span class="item-dots"></span>
-            <span class="item-price">$11.99</span>
+            <span class="item-price">$22</span>
           </div>
-          <div class="item-desc">Served with french fries</div>
           <div class="menu-item">
-            <span class="item-name">Fried Crab Platter</span>
+            <span class="item-name">20 Shrimp Combo (Works)</span>
             <span class="item-dots"></span>
-            <span class="item-price">$14.99</span>
+            <span class="item-price">$31</span>
           </div>
-          <div class="item-desc">Served with french fries</div>
           <div class="menu-item">
-            <span class="item-name">Fish &amp; Shrimp Combo</span>
+            <span class="item-name">30 Jumbo Garlic Shrimp</span>
             <span class="item-dots"></span>
-            <span class="item-price">$13.99</span>
+            <span class="item-price">$33</span>
           </div>
-          <div class="item-desc">Fried whiting + 5 jumbo shrimp w/ fries</div>
+          <div class="menu-item">
+            <span class="item-name">8 Shrimp / Broccoli / Rice</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$15</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">16 Shrimp / Broccoli / Rice</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$24</span>
+          </div>
         </div>
       </div>
 
-      <!-- Section 2: Seafood by the Pound -->
+      <!-- Featured 3: Garlic Combos Highlights -->
       <div class="column-section" data-col="right">
-        <img class="cat-image" src="media/food/503_516075355.jpg" alt="Seafood By The Pound">
-        <div class="cat-header">Seafood by the Pound</div>
+        <img class="cat-image" src="media/food/503_516075355.jpg" alt="Garlic Combos">
+        <div class="cat-header">Garlic Combos</div>
+        <div class="cat-sub">Popular Picks — All served with Corn &amp; Potatoes</div>
         <div class="items-list">
           <div class="menu-item">
-            <span class="item-name">Crawfish</span>
+            <span class="item-name">3 Blue Crab Combo</span>
             <span class="item-dots"></span>
-            <span class="item-price">$10/lb</span>
+            <span class="item-price">$31</span>
+          </div>
+          <div class="item-desc">3 Garlic Crabs, 10 Garlic Shrimp</div>
+          <div class="menu-item">
+            <span class="item-name">Snow &amp; Dungeness Combo</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$58</span>
+          </div>
+          <div class="item-desc">1 Snow, 1 Dungeness, 10 Shrimp + Eggs</div>
+          <div class="menu-item">
+            <span class="item-name">6 Large Crabs &amp; 10 Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$67</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Blue Crab (Live)</span>
+            <span class="item-name">King Crab &amp; 10 Shrimp</span>
             <span class="item-dots"></span>
-            <span class="item-price">$12/lb</span>
+            <span class="item-price">$60</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Jumbo Shrimp (Head-On)</span>
+            <span class="item-name">10 Shrimp &amp; 2 Lobster Tails</span>
             <span class="item-dots"></span>
-            <span class="item-price">$14/lb</span>
+            <span class="item-price">$40</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Snow Crab Legs</span>
+            <span class="item-name">Snow &amp; Crawfish Combo</span>
             <span class="item-dots"></span>
-            <span class="item-price">$22/lb</span>
+            <span class="item-price">$43.50</span>
+          </div>
+          <div class="item-desc">Snow Crab, 1lb Crawfish, Sausage &amp; Eggs</div>
+        </div>
+      </div>
+
+      <!-- Featured 4: Fried Platters -->
+      <div class="column-section" data-col="right">
+        <img class="cat-image" src="media/food/r772-Hninas-Seafood-meat-2023-04-2.jpg" alt="Fried Seafood">
+        <div class="cat-header">Fried Platters</div>
+        <div class="cat-sub">Served with French Fries or Hushpuppies</div>
+        <div class="items-list">
+          <div class="menu-item">
+            <span class="item-name">10 Fried Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$14</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">King Crab Legs</span>
+            <span class="item-name">15 Fried Shrimp</span>
             <span class="item-dots"></span>
-            <span class="item-price">$55/lb</span>
+            <span class="item-price">$20</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">20 Fried Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$25</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Fried Snapper</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$15 / $28</span>
+          </div>
+          <div class="item-desc">1 Filet / 2 Filets with French Fries</div>
+          <div class="menu-item">
+            <span class="item-name">Fried Grouper</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$17 / $29</span>
+          </div>
+          <div class="item-desc">1 Filet / 2 Filets with French Fries</div>
+          <div class="menu-item">
+            <span class="item-name">Fried Catfish (2 Filets)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$15</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Snapper + 5 Fried Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$21</span>
           </div>
         </div>
       </div>
 
-      <!-- Section 3: Sides & Drinks -->
+      <!-- Featured 5: Lunch Special -->
       <div class="column-section" data-col="right">
-        <div class="cat-header">Sides &amp; Drinks</div>
-        <div class="items-grid">
-          <div class="grid-section-label">Side Orders</div>
+        <div class="cat-header">Lunch Menu</div>
+        <div class="cat-sub">Available Until 2PM &mdash; *Subject to change based on availability</div>
+        <div class="items-list">
           <div class="menu-item">
-            <span class="item-name">French Fries</span>
-            <span class="item-price">$2.29</span>
+            <span class="item-name">8 Shrimp / Corn &amp; Potato</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$10</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Corn</span>
-            <span class="item-price">$0.99</span>
+            <span class="item-name">1 lb Crawfish / Corn &amp; Potato</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$13</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Corn &amp; Potato</span>
-            <span class="item-price">$2.99</span>
+            <span class="item-name">1 Snow Crab / Corn &amp; Potato</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$20</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Hush Puppies</span>
-            <span class="item-price">$2.50</span>
+            <span class="item-name">1 Snow Crab / 8 Shrimp / C&amp;P</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$27</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Smoked Sausage</span>
-            <span class="item-price">$3.00</span>
+            <span class="item-name">8 Fried Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$10</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Garlic Egg</span>
-            <span class="item-price">$0.79</span>
+            <span class="item-name">8 oz Snapper Filet</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$13</span>
           </div>
           <div class="menu-item">
-            <span class="item-name">Extra Butter Sauce</span>
-            <span class="item-price">$1.50</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Coleslaw</span>
-            <span class="item-price">$1.99</span>
-          </div>
-          <div class="grid-section-label">Drinks</div>
-          <div class="menu-item">
-            <span class="item-name">Fountain Drink</span>
-            <span class="item-price">$1.99</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Bottled Water</span>
-            <span class="item-price">$1.50</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Can Soda</span>
-            <span class="item-price">$1.50</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Juice</span>
-            <span class="item-price">$2.50</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 4: Extras & Add-Ons -->
-      <div class="column-section" data-col="right">
-        <div class="cat-header">Extras &amp; Add-Ons</div>
-        <div class="items-grid">
-          <div class="menu-item">
-            <span class="item-name">Extra Shrimp (5 pcs)</span>
-            <span class="item-price">$5.00</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Extra Crab Cluster</span>
-            <span class="item-price">$12.00</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Extra Lobster Tail</span>
-            <span class="item-price">$8.00</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Extra Sausage</span>
-            <span class="item-price">$2.00</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Extra Corn</span>
-            <span class="item-price">$0.99</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Extra Potato</span>
-            <span class="item-price">$0.99</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Garlic Butter Dip</span>
-            <span class="item-price">$1.50</span>
-          </div>
-          <div class="menu-item">
-            <span class="item-name">Cajun Seasoning</span>
-            <span class="item-price">$0.50</span>
+            <span class="item-name">6 Wings</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$10</span>
           </div>
         </div>
       </div>
