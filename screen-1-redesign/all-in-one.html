@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Hnina's Seafood Menu Board - Screen 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Oswald:wght@400;500;600;700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#111;font-family:'Open Sans',sans-serif;}
+
+.display-grid{
+  width:1920px;height:1080px;transform-origin:0 0;
+  display:flex;flex-direction:column;position:absolute;top:0;left:0;
+  contain:layout style;will-change:transform;
+  background:
+    repeating-linear-gradient(180deg,rgba(170,155,130,0.05) 0px,transparent 1px,transparent 5px,rgba(170,155,130,0.03) 6px,transparent 7px,transparent 16px),
+    repeating-linear-gradient(180deg,transparent 0px,transparent 138px,rgba(150,130,100,0.1) 138px,rgba(150,130,100,0.13) 140px),
+    repeating-linear-gradient(90deg,transparent 0px,transparent 478px,rgba(140,120,90,0.06) 478px,rgba(140,120,90,0.06) 480px),
+    linear-gradient(180deg,#ede5d8,#e4dace,#ebe3d6);
+}
+
+/* ── TOP TICKER ── */
+.top-ticker{height:30px;background:#1a3a5c;display:flex;align-items:center;flex-shrink:0;overflow:hidden;}
+.top-ticker-scroll{display:flex;white-space:nowrap;animation:ticker 35s linear infinite;will-change:transform;}
+.top-ticker-scroll span{font-family:'Oswald',sans-serif;font-weight:500;font-size:14px;color:#fff;padding:0 28px;display:inline-block;}
+.top-ticker-scroll .sep{color:#d4a44c;padding:0 5px;font-weight:700;}
+
+/* ── HEADER ── */
+.header{height:90px;display:flex;align-items:center;padding:0 36px;flex-shrink:0;}
+.header-left{width:220px;text-align:center;}
+.header-left .phone{font-family:'Oswald',sans-serif;font-weight:700;font-size:24px;color:#1a3a5c;}
+.header-left .addr{font-size:12px;color:#666;margin-top:1px;}
+.header-brand{flex:1;display:flex;align-items:center;justify-content:center;gap:16px;}
+.header-logo{width:72px;height:72px;object-fit:contain;flex-shrink:0;}
+.header-text{display:flex;flex-direction:column;}
+.header-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:46px;color:#1a3a5c;line-height:1;letter-spacing:1px;}
+.header-title .accent{color:#c0392b;}
+.header-subtitle{font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;color:#c0392b;letter-spacing:7px;text-transform:uppercase;margin-top:1px;}
+.header-right{width:220px;text-align:center;}
+.header-right .hours-line{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;color:#1a3a5c;line-height:1.4;}
+
+/* ── CATEGORY INDICATOR ── */
+.cat-indicator{height:32px;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 20px;flex-shrink:0;background:rgba(26,58,92,0.06);border-bottom:1px solid rgba(201,169,110,0.3);}
+.cat-pill{font-family:'Oswald',sans-serif;font-size:11px;font-weight:500;color:#666;text-transform:uppercase;letter-spacing:0.5px;padding:3px 10px;border-radius:12px;background:transparent;transition:all 0.4s ease;white-space:nowrap;}
+.cat-pill.active{background:#1a3a5c;color:#fff;font-weight:600;}
+
+/* ── MAIN ── */
+.main-content{flex:1;display:grid;grid-template-columns:290px 1fr 1fr 1fr;gap:10px;padding:6px 12px;overflow:hidden;min-height:0;}
+
+/* ── OUTER CARD ── */
+.menu-card{background:rgba(255,255,255,0.92);border-radius:10px;border:4px solid #c9a96e;box-shadow:inset 0 0 0 2px rgba(160,128,80,0.2),0 2px 8px rgba(0,0,0,0.1);padding:10px 12px;overflow:hidden;display:flex;flex-direction:column;}
+
+/* ── ROTATING COLUMN ── */
+.col-rotating{position:relative;padding:0;}
+.col-page{position:absolute;top:10px;left:12px;right:12px;bottom:34px;opacity:0;transform:translateY(6px);transition:opacity 0.6s ease,transform 0.6s ease;display:flex;flex-direction:column;overflow:hidden;pointer-events:none;will-change:opacity,transform;}
+.col-page.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+
+/* ── SECTION HEADER ── */
+.sh{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;color:#1a3a5c;text-transform:uppercase;letter-spacing:1.5px;padding-bottom:4px;border-bottom:3px solid #c0392b;margin-bottom:5px;flex-shrink:0;}
+.ss{font-size:13px;color:#666;font-style:italic;margin-bottom:4px;flex-shrink:0;line-height:1.2;}
+
+/* ── SAUCE PILLS ── */
+.sauce-row{display:flex;flex-wrap:wrap;gap:3px 5px;margin-bottom:5px;flex-shrink:0;}
+.sauce-pill{font-family:'Oswald',sans-serif;font-size:11px;font-weight:500;color:#1a3a5c;background:rgba(26,58,92,0.08);border:1px solid rgba(26,58,92,0.18);padding:2px 8px;border-radius:10px;white-space:nowrap;text-transform:uppercase;letter-spacing:0.3px;}
+
+/* ── CARD GRID (replaces mi-list) ── */
+.card-grid{flex:1;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-content:start;}
+.card-grid.compact{grid-template-columns:repeat(3,1fr);}
+
+/* ── ITEM CARD ── */
+.item-card{background:rgba(255,255,255,0.6);border:1.5px solid rgba(201,169,110,0.35);border-radius:7px;padding:6px 10px;display:flex;flex-direction:column;gap:1px;transition:opacity 0.3s;}
+.item-top{display:flex;align-items:baseline;justify-content:space-between;gap:5px;}
+.item-name{font-size:15px;font-weight:600;color:#222;line-height:1.25;}
+.item-price{font-family:'Oswald',sans-serif;font-weight:700;font-size:17px;color:#8b1a1a;white-space:nowrap;text-align:right;flex-shrink:0;}
+.item-desc{font-size:11px;font-weight:400;color:#666;font-style:italic;line-height:1.25;}
+
+/* ── FEATURED CARD ── */
+.item-card.featured{grid-column:1/-1;border-color:#c0392b;border-width:2px;background:rgba(255,245,238,0.85);padding:7px 12px;}
+.item-card.featured .item-name{font-size:16px;font-weight:700;}
+.item-card.featured .item-price{font-size:19px;}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:3px;font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:1.4;}
+.badge-popular{background:#c0392b;color:#fff;}
+.badge-popular::before{content:"\2605";font-size:9px;}
+.badge-oos{background:#888;color:#fff;}
+.badge-oos::before{content:"\2715";font-size:8px;}
+
+/* ── OUT OF STOCK ── */
+.item-card.out-of-stock{opacity:0.45;order:999;}
+.item-card.out-of-stock .item-price{text-decoration:line-through;color:#999;}
+
+/* ── COL 1: DAILY SPECIALS ── */
+.col-specials{
+  background:repeating-linear-gradient(transparent,transparent 24px,rgba(180,160,120,0.12) 24px,rgba(180,160,120,0.12) 25px),linear-gradient(180deg,#f5e6c8,#f0dfc0);
+  border-color:#b89850;
+}
+.specials-list{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;}
+.sp{padding:3px 5px;border-left:3px solid transparent;border-radius:2px;transition:background 0.3s;}
+.sp.today{border-left-color:#c0392b;background:rgba(192,57,43,0.08);}
+.sp-day{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;color:#1a3a5c;text-transform:uppercase;display:inline-block;width:40px;}
+.sp-name{font-weight:700;font-size:14px;color:#222;}
+.sp-price{font-family:'Oswald',sans-serif;font-weight:700;font-size:17px;color:#c0392b;float:right;}
+.sp-desc{font-size:12px;color:#666;font-style:italic;margin-left:44px;line-height:1.2;}
+
+.qr-section{text-align:center;padding-top:8px;border-top:2px dashed #c4a76c;flex-shrink:0;}
+.qr-section .qr-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;color:#c0392b;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.qr-section img{width:140px;height:140px;border:3px solid #1a3a5c;border-radius:5px;}
+.qr-section .qr-addr{font-size:9px;color:#666;margin-top:4px;line-height:1.3;}
+
+/* ── PORTHOLE ── */
+.ph-wrap{display:flex;justify-content:center;margin:5px 0;flex-shrink:0;}
+.ph{width:120px;height:120px;border-radius:50%;position:relative;}
+.ph-ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,#a0a0a0,#d0d0d0 30deg,#888 60deg,#c8c8c8 90deg,#999 120deg,#ddd 150deg,#aaa 180deg,#ccc 210deg,#888 240deg,#bbb 270deg,#999 300deg,#d0d0d0 330deg,#a0a0a0);box-shadow:0 2px 6px rgba(0,0,0,0.3),inset 0 1px 2px rgba(255,255,255,0.3);}
+.ph-inner{position:absolute;border-radius:50%;overflow:hidden;top:8px;left:8px;right:8px;bottom:8px;}
+.ph-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.ph-bolt{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ddd,#888 60%,#666);box-shadow:inset 0 1px 1px rgba(255,255,255,0.5),0 1px 2px rgba(0,0,0,0.3);}
+.ph-bolt.bt{top:1px;left:50%;transform:translateX(-50%);}
+.ph-bolt.bb{bottom:1px;left:50%;transform:translateX(-50%);}
+.ph-bolt.bl{left:1px;top:50%;transform:translateY(-50%);}
+.ph-bolt.br{right:1px;top:50%;transform:translateY(-50%);}
+
+/* ── PAGE INDICATORS ── */
+.pg-ind{position:absolute;bottom:5px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:4px;height:28px;}
+.pg-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;background:#e8e8e8;color:#999;transition:all 0.3s;}
+.pg-num.active{background:#c0392b;color:#fff;}
+.cd-bar{display:inline-flex;align-items:center;gap:4px;margin-left:6px;}
+.cd-track{width:50px;height:4px;border-radius:2px;background:#ddd;overflow:hidden;}
+.cd-fill{width:100%;height:100%;border-radius:2px;background:linear-gradient(90deg,#d4a44c,#e6c06e);transform-origin:left center;will-change:transform;}
+.cd-text{font-family:'Oswald',sans-serif;font-size:11px;color:#d4a44c;font-weight:600;min-width:18px;}
+
+/* ── FOOTER ── */
+.footer{height:48px;background:#1a3a5c;display:flex;align-items:center;flex-shrink:0;overflow:hidden;}
+.footer-badge{background:#c0392b;color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;padding:5px 16px;white-space:nowrap;z-index:2;letter-spacing:0.5px;text-transform:uppercase;flex-shrink:0;height:100%;display:flex;align-items:center;}
+.ticker-wrap{flex:1;overflow:hidden;height:100%;display:flex;align-items:center;}
+.ticker-inner{display:flex;white-space:nowrap;animation:ticker 30s linear infinite;will-change:transform;}
+.ticker-inner span{font-family:'Oswald',sans-serif;font-weight:500;font-size:16px;color:#fff;padding:0 32px;display:inline-block;}
+.ticker-inner .td{color:#d4a44c;font-size:18px;padding:0 6px;}
+
+@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+</style>
+</head>
+<body>
+<div class="display-grid">
+
+<!-- TOP TICKER -->
+<div class="top-ticker">
+  <div class="top-ticker-scroll">
+    <span>ORDER ONLINE AT ORDER.TOASTTAB.COM</span><span class="sep">|</span>
+    <span>DAILY FRESH CATCH AVAILABLE &mdash; ASK US!</span><span class="sep">|</span>
+    <span>WE DELIVER! &mdash; DOORDASH &amp; UBEREATS</span><span class="sep">|</span>
+    <span>FOLLOW US @HNINASSEAFOOD ON FACEBOOK</span><span class="sep">|</span>
+    <span>ORDER ONLINE AT ORDER.TOASTTAB.COM</span><span class="sep">|</span>
+    <span>DAILY FRESH CATCH AVAILABLE &mdash; ASK US!</span><span class="sep">|</span>
+    <span>WE DELIVER! &mdash; DOORDASH &amp; UBEREATS</span><span class="sep">|</span>
+    <span>FOLLOW US @HNINASSEAFOOD ON FACEBOOK</span><span class="sep">|</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="phone">(407) 440-2822</div>
+    <div class="addr">1104 S Clarke Rd, Ocoee FL</div>
+  </div>
+  <div class="header-brand">
+    <img class="header-logo" src="media/logo/logo-1.jpg" alt="Hnina's Seafood">
+    <div class="header-text">
+      <div class="header-title">Hnina<span class="accent">'</span>s</div>
+      <div class="header-subtitle">SEAFOOD</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="hours-line">Mon&ndash;Sat 11AM&ndash;8PM</div>
+    <div class="hours-line">Sunday 12PM&ndash;5PM</div>
+  </div>
+</div>
+
+<!-- CATEGORY INDICATOR -->
+<div class="cat-indicator" id="catIndicator"></div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+<!-- COL 1: DAILY SPECIALS (static) -->
+<div class="menu-card col-specials">
+  <div class="sh">DAILY SPECIALS</div>
+  <div class="specials-list">
+    <div class="sp" data-day="1"><div><span class="sp-day">MON</span><span class="sp-name">10 Garlic Shrimp + Corn &amp; Potato</span><span class="sp-price">$13</span></div><div class="sp-desc">Garlic butter jumbo shrimp combo</div></div>
+    <div class="sp" data-day="2"><div><span class="sp-day">TUE</span><span class="sp-name">Snow Crab Cluster Combo</span><span class="sp-price">$20</span></div><div class="sp-desc">w/ Corn, Potato &amp; Sausage</div></div>
+    <div class="sp" data-day="3"><div><span class="sp-day">WED</span><span class="sp-name">Fried Fish Platter (Whiting)</span><span class="sp-price">$9</span></div><div class="sp-desc">Served with french fries</div></div>
+    <div class="sp" data-day="4"><div><span class="sp-day">THU</span><span class="sp-name">3 Lobster Tails Combo</span><span class="sp-price">$20</span></div><div class="sp-desc">w/ Corn &amp; Potato</div></div>
+    <div class="sp" data-day="5"><div><span class="sp-day">FRI</span><span class="sp-name">Blue Crab Combo (3 Crabs)</span><span class="sp-price">$38</span></div><div class="sp-desc">w/ Corn, Potato &amp; Sausage</div></div>
+    <div class="sp" data-day="6"><div><span class="sp-day">SAT</span><span class="sp-name">2 Snow Crab + 30 Shrimp Feast</span><span class="sp-price">$44</span></div><div class="sp-desc">w/ Corn, Potato &amp; Sausage</div></div>
+    <div class="sp" data-day="0"><div><span class="sp-day">SUN</span><span class="sp-name">20 Garlic Shrimp + Corn &amp; Potato</span><span class="sp-price">$24</span></div><div class="sp-desc">Sunday family garlic shrimp deal</div></div>
+  </div>
+  <div class="qr-section">
+    <div class="qr-title">Order Online!</div>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Forder.toasttab.com%2Fonline%2Fhninasseafood&bgcolor=ffffff&color=000000" alt="QR" width="140" height="140">
+    <div class="qr-addr">order.toasttab.com/online/hninasseafood</div>
+  </div>
+</div>
+
+<!-- COL 2: rotating (JS-rendered) -->
+<div class="menu-card col-rotating" id="col2wrap">
+  <div id="col2"></div>
+  <div class="pg-ind" id="ind2"></div>
+</div>
+
+<!-- COL 3: rotating (JS-rendered) -->
+<div class="menu-card col-rotating" id="col3wrap">
+  <div id="col3"></div>
+  <div class="pg-ind" id="ind3"></div>
+</div>
+
+<!-- COL 4: rotating (JS-rendered) -->
+<div class="menu-card col-rotating" id="col4wrap">
+  <div id="col4"></div>
+  <div class="pg-ind" id="ind4"></div>
+</div>
+
+</div><!-- /main-content -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-badge">Live Blue Crabs Available Daily!</div>
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <span>Hours: Mon&ndash;Sat 11AM&ndash;8PM &bull; Sun 12PM&ndash;5PM</span><span class="td">&bull;</span>
+      <span>Order Online at order.toasttab.com</span><span class="td">&bull;</span>
+      <span>Follow us @HninasSeafood on Facebook</span><span class="td">&bull;</span>
+      <span>Call us: (407) 440-2822</span><span class="td">&bull;</span>
+      <span>1104 S Clarke Rd, Ocoee FL</span><span class="td">&bull;</span>
+      <span>Hours: Mon&ndash;Sat 11AM&ndash;8PM &bull; Sun 12PM&ndash;5PM</span><span class="td">&bull;</span>
+      <span>Order Online at order.toasttab.com</span><span class="td">&bull;</span>
+      <span>Follow us @HninasSeafood on Facebook</span><span class="td">&bull;</span>
+      <span>Call us: (407) 440-2822</span><span class="td">&bull;</span>
+      <span>1104 S Clarke Rd, Ocoee FL</span><span class="td">&bull;</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /display-grid -->
+
+<script>
+(function(){
+
+  /* ═══════════════════════════════════════
+     MENU DATA - Edit items here!
+     Set featured:true for Popular badge
+     Set outOfStock:true to dim + label
+     ═══════════════════════════════════════ */
+
+  var MENU_DATA = {
+    buildACombo: {
+      name: "Build A Combo",
+      subtitle: "All served with Corn & Potatoes",
+      image: "media/food/rf31-Hninas-Seafood-meat-2023-04-4.jpg",
+      items: [
+        {name:"10 Garlic Shrimp", price:"$12", featured:false, outOfStock:false},
+        {name:"20 Garlic Shrimp", price:"$22", featured:false, outOfStock:false},
+        {name:"1 LB Crawfish", price:"$16", featured:false, outOfStock:false},
+        {name:"Clams (Steamed)", price:"$15", featured:false, outOfStock:false},
+        {name:"Green Mussels", price:"$16", featured:false, outOfStock:false},
+        {name:"Black Mussels (1 lb)", price:"$16", featured:false, outOfStock:false},
+        {name:"Snow Crab Cluster", price:"$22", featured:true, outOfStock:false},
+        {name:"4oz Lobster Tail", price:"$18", featured:false, outOfStock:false},
+        {name:"(3) 4oz Lobster Tails", price:"$45", featured:true, outOfStock:false}
+      ]
+    },
+    garlicShrimpCombos: {
+      name: "Garlic Shrimp Combos",
+      subtitle: "Old Bay & Cajun spices",
+      items: [
+        {name:"10 Jumbo Garlic Shrimp", price:"$13", featured:false, outOfStock:false},
+        {name:"10 Garlic Shrimp Combo", price:"$21", featured:false, outOfStock:false},
+        {name:"20 Jumbo Garlic Shrimp", price:"$22", featured:false, outOfStock:false},
+        {name:"20 Shrimp Combo (Works)", price:"$31", featured:true, outOfStock:false},
+        {name:"30 Jumbo Garlic Shrimp", price:"$33", featured:false, outOfStock:false},
+        {name:"8 Shrimp / Broccoli / Rice", price:"$15", featured:false, outOfStock:false},
+        {name:"16 Shrimp / Broccoli / Rice", price:"$24", featured:false, outOfStock:false}
+      ]
+    },
+    specials: {
+      name: "Specials",
+      items: [
+        {name:"Steamed Snapper", price:"$20", featured:false, outOfStock:false},
+        {name:"10 Garlic + 10 Fried Combo", price:"$25", featured:false, outOfStock:false},
+        {name:"20 Garlic + 20 Fried Combo", price:"$50", featured:false, outOfStock:false}
+      ]
+    },
+    garlicCombos1: {
+      name: "Garlic Combos",
+      subtitle: "All served with Corn & Potatoes",
+      image: "media/food/503_516075355.jpg",
+      items: [
+        {name:"3 Med Blue Crab", price:"$22", featured:false, outOfStock:false},
+        {name:"3 Large Blue Crab", price:"$31", featured:false, outOfStock:false},
+        {name:"3 XL Blue Crab", price:"$35", featured:false, outOfStock:false},
+        {name:"Crawfish Corn & Potatoes", price:"$16", featured:false, outOfStock:false},
+        {name:"1 lb Crawfish & 10 Shrimp", price:"$26", featured:false, outOfStock:false},
+        {name:"6 Blue Crabs", price:"$43", featured:false, outOfStock:false},
+        {name:"6 Large Crabs", price:"$58", featured:false, outOfStock:false},
+        {name:"Snow & Dungeness Combo", price:"$58", featured:true, outOfStock:false},
+        {name:"10 Shrimp & 2 Lobster Tails", price:"$40", featured:false, outOfStock:false},
+        {name:"3 Blue Crab Combo", price:"$31", featured:false, outOfStock:false}
+      ]
+    },
+    garlicCombos2: {
+      name: "Garlic Combos (cont.)",
+      subtitle: "All served with Corn & Potatoes",
+      items: [
+        {name:"3 Lg Crab & 10 Shrimp", price:"$40", featured:false, outOfStock:false},
+        {name:"King Crab & 10 Shrimp", price:"$60", featured:true, outOfStock:false},
+        {name:"6 LC / 20 Shrimp / Crawfish", price:"$100", featured:false, outOfStock:false},
+        {name:"6 Med Crab & 10 Shrimp", price:"$50", featured:false, outOfStock:false},
+        {name:"6 Lg Crabs & 10 Shrimp", price:"$67", featured:false, outOfStock:false},
+        {name:"1 Snow Crab & 10 Shrimp", price:"$31", featured:false, outOfStock:false},
+        {name:"2 Snow Crab Clusters", price:"$42", featured:false, outOfStock:false},
+        {name:"1 Dungeness Combo", price:"$31", featured:false, outOfStock:false},
+        {name:"2 Dungeness Clusters", price:"$42", featured:false, outOfStock:false},
+        {name:"2 Dungeness & 10 Shrimp", price:"$50", featured:false, outOfStock:false}
+      ]
+    },
+    crawfishCombos: {
+      name: "Crawfish Combos",
+      items: [
+        {name:"1 LB Crawfish", price:"$16", featured:false, outOfStock:false},
+        {name:"2 LB Crawfish", price:"$29", featured:false, outOfStock:false},
+        {name:"Snow & Crawfish", price:"$43.50", featured:true, outOfStock:false},
+        {name:"Crawfish For Two", price:"$43", featured:false, outOfStock:false}
+      ]
+    },
+    familyCombos: {
+      name: "Family Combos",
+      items: [
+        {name:"Hnina Combo 1", price:"$150", desc:"2 Snow, 2 Lobster, 30 Shrimp, 1lb Crawfish, 3 C&P, 6 Eggs, 2 Sausages", featured:true, outOfStock:false},
+        {name:"Crawfish Crazy", price:"$105", desc:"5 lbs crawfish, 30 shrimp, 3 C&P, 6 eggs, 2 sausages", featured:false, outOfStock:false}
+      ]
+    },
+    combosFor2: {
+      name: "Combos For 2",
+      image: "media/food/482204665_1175274780967780_65374385545676278_n.jpg",
+      items: [
+        {name:"Crab Shrimp Crawfish", price:"$87", featured:false, outOfStock:false}
+      ]
+    },
+    friedPlatters: {
+      name: "Fried Platters",
+      subtitle: "w/ French Fries or Hushpuppies",
+      items: [
+        {name:"10 Fried Shrimp", price:"$14", featured:false, outOfStock:false},
+        {name:"15 Fried Shrimp", price:"$20", featured:false, outOfStock:false},
+        {name:"20 Fried Shrimp", price:"$25", featured:true, outOfStock:false},
+        {name:"15 Fried Shrimp (No Sides)", price:"$17", featured:false, outOfStock:false},
+        {name:"Fried Snapper (1 Filet)", price:"$15", featured:false, outOfStock:false},
+        {name:"Fried Snapper (2 Filet)", price:"$28", featured:false, outOfStock:false},
+        {name:"Fried Grouper (1 Filet)", price:"$17", featured:false, outOfStock:false},
+        {name:"Fried Grouper (2 Filet)", price:"$29", featured:false, outOfStock:false},
+        {name:"Fried Catfish (2 Filet)", price:"$15", featured:false, outOfStock:false},
+        {name:"Fried Tilapia (2 Filet)", price:"$14", featured:false, outOfStock:false},
+        {name:"Fried Redfish (1 Filet)", price:"$15", featured:false, outOfStock:false},
+        {name:"Fried Redfish (2 Filet)", price:"$24", featured:false, outOfStock:false},
+        {name:"1/2 Catfish & 5 Shrimp", price:"$15", featured:false, outOfStock:false},
+        {name:"Snapper + 5 Fried Shrimp", price:"$21", featured:false, outOfStock:false}
+      ]
+    },
+    wings: {
+      name: "Wings",
+      subtitle: "Served with fries & choice of Blue Cheese or Ranch",
+      image: "media/food/r772-Hninas-Seafood-meat-2023-04-2.jpg",
+      sauces: ["Plain","Buffalo","BBQ","Lemon Pepper","Garlic Parmesan","Honey Mustard","Teriyaki"],
+      items: [
+        {name:"6 Wings", price:"$10", featured:false, outOfStock:false},
+        {name:"10 Wings", price:"$15", featured:false, outOfStock:false},
+        {name:"15 Wings", price:"$23", featured:false, outOfStock:false},
+        {name:"20 Wings", price:"$28", featured:true, outOfStock:false}
+      ]
+    },
+    appetizers: {
+      name: "Appetizers",
+      items: [
+        {name:"Chicken Strips w/ FF", price:"$13", featured:false, outOfStock:false},
+        {name:"Mozzarella Sticks", price:"$6", featured:false, outOfStock:false},
+        {name:"5 Shrimp & 6 Wing Combo", price:"$20", featured:false, outOfStock:false},
+        {name:"10 Shrimp & 10 Wing Combo", price:"$29", featured:true, outOfStock:false},
+        {name:"Clam Strips", price:"$8", featured:false, outOfStock:false},
+        {name:"Onion Rings", price:"$6", featured:false, outOfStock:false},
+        {name:"Fried Okra", price:"$6", featured:false, outOfStock:false}
+      ]
+    },
+    sideOrders: {
+      name: "Side Orders",
+      items: [
+        {name:"Corn & Potato", price:"$5", featured:false, outOfStock:false},
+        {name:"Corn, Potato & Sausage", price:"$10", featured:false, outOfStock:false},
+        {name:"Sausage (Smoked)", price:"$5", featured:false, outOfStock:false},
+        {name:"French Fries", price:"$4", featured:false, outOfStock:false},
+        {name:"Hush Puppies (Full)", price:"$5", featured:false, outOfStock:false},
+        {name:"1/2 Hush Puppies", price:"$2.50", featured:false, outOfStock:false},
+        {name:"1 Hush Puppy", price:"$0.65", featured:false, outOfStock:false},
+        {name:"Corn on the Cob", price:"$1.50", featured:false, outOfStock:false},
+        {name:"4 Corn", price:"$5", featured:false, outOfStock:false},
+        {name:"Potatoes", price:"$4", featured:false, outOfStock:false},
+        {name:"Broccoli", price:"$4", featured:false, outOfStock:false},
+        {name:"White Rice", price:"$4", featured:false, outOfStock:false},
+        {name:"Okra", price:"$6", featured:false, outOfStock:false},
+        {name:"Onion Rings", price:"$6", featured:false, outOfStock:false},
+        {name:"1 Garlic Egg", price:"$1.50", featured:false, outOfStock:false},
+        {name:"3 Garlic Eggs", price:"$4.50", featured:false, outOfStock:false},
+        {name:"Coleslaw", price:"$2.50", featured:false, outOfStock:false},
+        {name:"Condiment", price:"$0.25", featured:false, outOfStock:false},
+        {name:"Garlic Butter (Extra)", price:"$1", featured:false, outOfStock:false}
+      ]
+    },
+    drinks: {
+      name: "Drinks",
+      image: "media/food/r549-meat-Hninas-Seafood-2023-04-1.jpg",
+      items: [
+        {name:"Bottle Soda", price:"$3", featured:false, outOfStock:false},
+        {name:"Powerade", price:"$3", featured:false, outOfStock:false},
+        {name:"Water Bottle", price:"$2", featured:false, outOfStock:false},
+        {name:"Sparkling Water", price:"$3", featured:false, outOfStock:false},
+        {name:"Topochico Bottles", price:"$4", featured:false, outOfStock:false},
+        {name:"White Claw", price:"$4.50", featured:false, outOfStock:false},
+        {name:"Sun Cruiser (Iced Tea)", price:"$5.50", featured:false, outOfStock:false}
+      ]
+    }
+  };
+
+  /* ═══════════════════════════════════════
+     PAGE LAYOUT DEFINITIONS
+     Each column has pages; each page has
+     category keys, optional image, optional
+     compact flag
+     ═══════════════════════════════════════ */
+
+  var COL2_PAGES = [
+    { cats: ["buildACombo"], image: "media/food/rf31-Hninas-Seafood-meat-2023-04-4.jpg" },
+    { cats: ["garlicShrimpCombos", "specials"] }
+  ];
+  var COL3_PAGES = [
+    { cats: ["garlicCombos1"], image: "media/food/503_516075355.jpg" },
+    { cats: ["garlicCombos2"] },
+    { cats: ["crawfishCombos", "familyCombos", "combosFor2"], image: "media/food/482204665_1175274780967780_65374385545676278_n.jpg" }
+  ];
+  var COL4_PAGES = [
+    { cats: ["friedPlatters"] },
+    { cats: ["wings", "appetizers"], image: "media/food/r772-Hninas-Seafood-meat-2023-04-2.jpg" },
+    { cats: ["sideOrders"], compact: true },
+    { cats: ["drinks"], image: "media/food/r549-meat-Hninas-Seafood-2023-04-1.jpg" }
+  ];
+
+  /* Category indicator mapping: label -> which col pages show it */
+  var CAT_LABELS = [
+    {id:"buildACombo", label:"Build A Combo"},
+    {id:"garlicShrimpCombos", label:"Garlic Shrimp"},
+    {id:"specials", label:"Specials"},
+    {id:"garlicCombos1", label:"Garlic Combos"},
+    {id:"garlicCombos2", label:"Garlic Combos"},
+    {id:"crawfishCombos", label:"Crawfish"},
+    {id:"familyCombos", label:"Family"},
+    {id:"combosFor2", label:"For 2"},
+    {id:"friedPlatters", label:"Fried Platters"},
+    {id:"wings", label:"Wings"},
+    {id:"appetizers", label:"Appetizers"},
+    {id:"sideOrders", label:"Sides"},
+    {id:"drinks", label:"Drinks"}
+  ];
+
+  /* ═══════════════════════════════════════
+     RENDERING ENGINE
+     ═══════════════════════════════════════ */
+
+  function sortItems(items) {
+    var featured = [], normal = [], oos = [];
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      if (it.outOfStock) oos.push(it);
+      else if (it.featured) featured.push(it);
+      else normal.push(it);
+    }
+    return featured.concat(normal).concat(oos);
+  }
+
+  function makePorthole(src) {
+    var wrap = document.createElement('div');
+    wrap.className = 'ph-wrap';
+    wrap.innerHTML = '<div class="ph"><div class="ph-ring"></div><div class="ph-inner"><img src="'+src+'" alt="Food"></div><div class="ph-bolt bt"></div><div class="ph-bolt bb"></div><div class="ph-bolt bl"></div><div class="ph-bolt br"></div></div>';
+    return wrap;
+  }
+
+  function renderCard(item) {
+    var card = document.createElement('div');
+    card.className = 'item-card';
+    if (item.featured) card.classList.add('featured');
+    if (item.outOfStock) card.classList.add('out-of-stock');
+
+    var top = document.createElement('div');
+    top.className = 'item-top';
+
+    var nm = document.createElement('span');
+    nm.className = 'item-name';
+    nm.textContent = item.name;
+    top.appendChild(nm);
+
+    if (item.featured && !item.outOfStock) {
+      var b = document.createElement('span');
+      b.className = 'badge badge-popular';
+      b.textContent = 'POPULAR';
+      top.appendChild(b);
+    }
+    if (item.outOfStock) {
+      var ob = document.createElement('span');
+      ob.className = 'badge badge-oos';
+      ob.textContent = 'OUT OF STOCK';
+      top.appendChild(ob);
+    }
+
+    var pr = document.createElement('span');
+    pr.className = 'item-price';
+    pr.textContent = item.price;
+    top.appendChild(pr);
+
+    card.appendChild(top);
+
+    if (item.desc) {
+      var desc = document.createElement('div');
+      desc.className = 'item-desc';
+      desc.textContent = item.desc;
+      card.appendChild(desc);
+    }
+    return card;
+  }
+
+  function buildColumn(containerId, pages) {
+    var container = document.getElementById(containerId);
+    for (var p = 0; p < pages.length; p++) {
+      var pageDef = pages[p];
+      var page = document.createElement('div');
+      page.className = 'col-page' + (p === 0 ? ' active' : '');
+
+      for (var c = 0; c < pageDef.cats.length; c++) {
+        var catKey = pageDef.cats[c];
+        var catData = MENU_DATA[catKey];
+        if (!catData) continue;
+
+        // Section header
+        var sh = document.createElement('div');
+        sh.className = 'sh';
+        if (c > 0) sh.style.marginTop = '8px';
+        sh.textContent = catData.name.toUpperCase();
+        page.appendChild(sh);
+
+        if (catData.subtitle) {
+          var ss = document.createElement('div');
+          ss.className = 'ss';
+          ss.textContent = catData.subtitle;
+          page.appendChild(ss);
+        }
+
+        // Sauce pills
+        if (catData.sauces && catData.sauces.length) {
+          var row = document.createElement('div');
+          row.className = 'sauce-row';
+          for (var s = 0; s < catData.sauces.length; s++) {
+            var pill = document.createElement('span');
+            pill.className = 'sauce-pill';
+            pill.textContent = catData.sauces[s];
+            row.appendChild(pill);
+          }
+          page.appendChild(row);
+        }
+
+        // Card grid
+        var grid = document.createElement('div');
+        grid.className = 'card-grid';
+        if (pageDef.compact) grid.classList.add('compact');
+
+        var sorted = sortItems(catData.items);
+        for (var i = 0; i < sorted.length; i++) {
+          grid.appendChild(renderCard(sorted[i]));
+        }
+        page.appendChild(grid);
+      }
+
+      // Porthole image
+      if (pageDef.image) {
+        page.appendChild(makePorthole(pageDef.image));
+      }
+
+      container.appendChild(page);
+    }
+  }
+
+  /* ═══════════════════════════════════════
+     CATEGORY INDICATOR
+     ═══════════════════════════════════════ */
+
+  // Deduplicate labels
+  var pillLabels = [];
+  var seenLabels = {};
+  for (var i = 0; i < CAT_LABELS.length; i++) {
+    var cl = CAT_LABELS[i];
+    if (!seenLabels[cl.label]) {
+      seenLabels[cl.label] = true;
+      pillLabels.push(cl);
+    }
+  }
+
+  var indicator = document.getElementById('catIndicator');
+  for (var i = 0; i < pillLabels.length; i++) {
+    var pill = document.createElement('span');
+    pill.className = 'cat-pill';
+    pill.setAttribute('data-cat', pillLabels[i].label);
+    pill.textContent = pillLabels[i].label;
+    indicator.appendChild(pill);
+  }
+
+  // Map page index -> active category labels for each column
+  function getPageCatLabels(pages) {
+    var map = [];
+    for (var p = 0; p < pages.length; p++) {
+      var labels = [];
+      for (var c = 0; c < pages[p].cats.length; c++) {
+        var catKey = pages[p].cats[c];
+        for (var j = 0; j < CAT_LABELS.length; j++) {
+          if (CAT_LABELS[j].id === catKey && labels.indexOf(CAT_LABELS[j].label) === -1) {
+            labels.push(CAT_LABELS[j].label);
+          }
+        }
+      }
+      map.push(labels);
+    }
+    return map;
+  }
+
+  var col2CatMap = getPageCatLabels(COL2_PAGES);
+  var col3CatMap = getPageCatLabels(COL3_PAGES);
+  var col4CatMap = getPageCatLabels(COL4_PAGES);
+
+  // Track active pages per column
+  var activeCats = { col2: 0, col3: 0, col4: 0 };
+
+  function updateIndicator() {
+    var active = [];
+    var c2 = col2CatMap[activeCats.col2] || [];
+    var c3 = col3CatMap[activeCats.col3] || [];
+    var c4 = col4CatMap[activeCats.col4] || [];
+    for (var i = 0; i < c2.length; i++) if (active.indexOf(c2[i]) === -1) active.push(c2[i]);
+    for (var i = 0; i < c3.length; i++) if (active.indexOf(c3[i]) === -1) active.push(c3[i]);
+    for (var i = 0; i < c4.length; i++) if (active.indexOf(c4[i]) === -1) active.push(c4[i]);
+
+    var pills = indicator.querySelectorAll('.cat-pill');
+    for (var i = 0; i < pills.length; i++) {
+      var lbl = pills[i].getAttribute('data-cat');
+      if (active.indexOf(lbl) !== -1) {
+        pills[i].classList.add('active');
+      } else {
+        pills[i].classList.remove('active');
+      }
+    }
+  }
+
+  /* ═══════════════════════════════════════
+     BUILD COLUMNS
+     ═══════════════════════════════════════ */
+
+  buildColumn('col2', COL2_PAGES);
+  buildColumn('col3', COL3_PAGES);
+  buildColumn('col4', COL4_PAGES);
+
+  /* ═══════════════════════════════════════
+     ROTATION ENGINE
+     ═══════════════════════════════════════ */
+
+  function setupCol(colId, indId, ms, colKey) {
+    var col = document.getElementById(colId);
+    var ind = document.getElementById(indId);
+    var pages = col.querySelectorAll('.col-page');
+    var total = pages.length;
+    if (total < 2) return;
+
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < total; i++) {
+      var n = document.createElement('span');
+      n.className = 'pg-num' + (i === 0 ? ' active' : '');
+      n.textContent = i + 1;
+      frag.appendChild(n);
+    }
+    ind.appendChild(frag);
+
+    var cd = document.createElement('div');
+    cd.className = 'cd-bar';
+    cd.innerHTML = '<div class="cd-track"><div class="cd-fill"></div></div><span class="cd-text"></span>';
+    ind.appendChild(cd);
+
+    var nums = ind.querySelectorAll('.pg-num');
+    var fill = ind.querySelector('.cd-fill');
+    var text = ind.querySelector('.cd-text');
+    var cur = 0, start = performance.now();
+    text.textContent = Math.ceil(ms/1000) + 's';
+
+    // Set initial category indicator
+    activeCats[colKey] = 0;
+    updateIndicator();
+
+    function tick(now) {
+      var el = now - start, rem = Math.max(0, ms - el);
+      fill.style.transform = 'scaleX(' + (rem/ms) + ')';
+      text.textContent = Math.ceil(rem/1000) + 's';
+      if (el >= ms) {
+        pages[cur].classList.remove('active');
+        nums[cur].classList.remove('active');
+        cur = (cur+1) % total;
+        pages[cur].classList.add('active');
+        nums[cur].classList.add('active');
+        start = now;
+        activeCats[colKey] = cur;
+        updateIndicator();
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // 15 second rotation, staggered starts
+  setupCol('col2','ind2', 15000, 'col2');
+  setTimeout(function(){ setupCol('col3','ind3', 15000, 'col3'); }, 5000);
+  setTimeout(function(){ setupCol('col4','ind4', 15000, 'col4'); }, 10000);
+
+  // Auto-scale
+  var grid = document.querySelector('.display-grid');
+  function scaleToFit() {
+    var s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    grid.style.transform = 'scale(' + s + ')';
+  }
+  scaleToFit();
+  window.addEventListener('resize', scaleToFit);
+
+  // Daily special highlight
+  var today = new Date().getDay();
+  document.querySelectorAll('.sp').forEach(function(el) {
+    if (parseInt(el.getAttribute('data-day'),10) === today) el.classList.add('today');
+  });
+
+})();
+</script>
+</body>
+</html>
