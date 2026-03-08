@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hnina's Seafood — Ticker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Open+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --accent: #e94560;
+      --accent-gold: #f5a623;
+      --text: #ffffff;
+      --ticker-bg: #0d0d1a;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: var(--ticker-bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .ticker-bar {
+      width: 100vw;
+      height: 100vh;
+      border-top: 3px solid var(--accent);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      contain: layout style;
+      position: relative;
+      background: linear-gradient(180deg, #1a0a10 0%, var(--ticker-bg) 40%, var(--ticker-bg) 60%, #0a0a14 100%);
+      box-shadow: 0 -4px 20px rgba(233, 69, 96, 0.3);
+    }
+
+    .ticker-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-gold), var(--accent));
+      box-shadow: 0 0 12px rgba(233, 69, 96, 0.5), 0 0 30px rgba(233, 69, 96, 0.2);
+    }
+
+    .ticker-label {
+      background: linear-gradient(135deg, var(--accent) 0%, #c23152 100%);
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      letter-spacing: 2px;
+      z-index: 2;
+      flex-shrink: 0;
+      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .ticker-label::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), transparent);
+      z-index: 3;
+    }
+
+    .ticker-track {
+      flex: 1;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-content {
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
+      transform: translateZ(0);
+      animation: ticker-scroll 40s linear infinite;
+    }
+
+    .ticker-content span {
+      font-size: 16px;
+      font-weight: 700;
+      padding: 0 35px;
+      color: var(--text);
+      letter-spacing: 0.3px;
+    }
+
+    .ticker-content span strong {
+      color: var(--accent-gold);
+      text-shadow: 0 0 10px rgba(245, 166, 35, 0.4);
+    }
+
+    .ticker-content .dot {
+      color: var(--accent);
+      padding: 0 5px;
+      text-shadow: 0 0 8px rgba(233, 69, 96, 0.5);
+      font-size: 18px;
+    }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0) translateZ(0); }
+      100% { transform: translateX(-50%) translateZ(0); }
+    }
+  </style>
+</head>
+<body>
+  <footer class="ticker-bar">
+    <div class="ticker-label">Now Serving</div>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        <span><strong>Hours:</strong> Mon-Sat 11AM-8PM &bull; Sun 12PM-5PM</span>
+        <span class="dot">&bull;</span>
+        <span>Follow us <strong>@HninasSeafood</strong> on Facebook</span>
+        <span class="dot">&bull;</span>
+        <span>Add extra <strong>garlic butter</strong> to any boil!</span>
+        <span class="dot">&bull;</span>
+        <span><strong>Live Blue Crabs</strong> Available Daily!</span>
+        <span class="dot">&bull;</span>
+        <span>Order Online at <strong>order.toasttab.com</strong></span>
+        <span class="dot">&bull;</span>
+        <span>Call us: <strong>(407) 440-2822</strong></span>
+        <span class="dot">&bull;</span>
+        <!-- Duplicate for seamless loop -->
+        <span><strong>Hours:</strong> Mon-Sat 11AM-8PM &bull; Sun 12PM-5PM</span>
+        <span class="dot">&bull;</span>
+        <span>Follow us <strong>@HninasSeafood</strong> on Facebook</span>
+        <span class="dot">&bull;</span>
+        <span>Add extra <strong>garlic butter</strong> to any boil!</span>
+        <span class="dot">&bull;</span>
+        <span><strong>Live Blue Crabs</strong> Available Daily!</span>
+        <span class="dot">&bull;</span>
+        <span>Order Online at <strong>order.toasttab.com</strong></span>
+        <span class="dot">&bull;</span>
+        <span>Call us: <strong>(407) 440-2822</strong></span>
+        <span class="dot">&bull;</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

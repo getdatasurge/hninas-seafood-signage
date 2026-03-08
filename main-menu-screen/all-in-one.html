@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hnina's Seafood — Digital Menu Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #1a1a2e;
+      --bg-panel: #16213e;
+      --bg-card: #0f3460;
+      --accent: #e94560;
+      --accent-gold: #f5a623;
+      --text: #ffffff;
+      --text-muted: #b0b8c8;
+      --ticker-bg: #0d0d1a;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: #000;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Page Grid ── */
+    .display-grid {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      grid-template-rows: 1fr 58px;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: center center;
+      background: var(--bg-dark);
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .sidebar {
+      grid-row: 1 / 2;
+      grid-column: 1 / 2;
+      background: linear-gradient(180deg, #16213e 0%, #0f1a30 40%, #16213e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 16px 14px;
+      gap: 10px;
+      border-right: 3px solid var(--accent);
+      position: relative;
+      contain: layout style;
+    }
+
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 15%, rgba(233, 69, 96, 0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 50% 85%, rgba(245, 166, 35, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .sidebar > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-wrapper {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--accent);
+      box-shadow: 0 4px 24px rgba(233, 69, 96, 0.4), 0 0 40px rgba(233, 69, 96, 0.15);
+      flex-shrink: 0;
+    }
+
+    .logo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .logo-subtitle {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-divider {
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent-gold), var(--accent), transparent);
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(233, 69, 96, 0.3);
+    }
+
+    .special-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      flex-shrink: 0;
+      text-shadow: 0 0 12px rgba(245, 166, 35, 0.4);
+    }
+
+    /* ── Daily Specials List ── */
+    .daily-specials {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .daily-special-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .daily-special-row.today {
+      background: linear-gradient(135deg, rgba(233, 69, 96, 0.3), rgba(245, 166, 35, 0.18));
+      border: 1px solid var(--accent);
+      box-shadow: 0 2px 16px rgba(233, 69, 96, 0.35), inset 0 0 20px rgba(233, 69, 96, 0.05);
+    }
+
+    .daily-special-row.today .day-label { color: var(--accent); }
+    .daily-special-row.today .special-name { color: #fff; }
+    .daily-special-row.today .special-price { color: var(--accent-gold); }
+
+    .day-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      width: 38px;
+      flex-shrink: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .special-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .special-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    .special-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    .special-price {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: rgba(245, 166, 35, 0.7);
+      flex-shrink: 0;
+    }
+
+    .daily-special-row.today .special-price {
+      font-size: 18px;
+    }
+
+    /* Today indicator arrow */
+    .today-arrow {
+      display: none;
+      color: var(--accent-gold);
+      font-size: 14px;
+      flex-shrink: 0;
+      animation: pulse-arrow 1.5s ease-in-out infinite;
+    }
+
+    .daily-special-row.today .today-arrow {
+      display: block;
+    }
+
+    @keyframes pulse-arrow {
+      0%, 100% { opacity: 1; transform: translateX(0) translateZ(0); }
+      50% { opacity: 0.6; transform: translateX(2px) translateZ(0); }
+    }
+
+    /* ── QR Rotating Panel ── */
+    .qr-panel {
+      flex: 1;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid rgba(233, 69, 96, 0.4);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(233, 69, 96, 0.1);
+      min-height: 0;
+    }
+
+    .qr-slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      opacity: 0;
+      will-change: opacity;
+      transform: translateZ(0);
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    .qr-slide.active {
+      opacity: 1;
+    }
+
+    .qr-slide.slide-order {
+      background: linear-gradient(135deg, rgba(233, 69, 96, 0.15), rgba(245, 166, 35, 0.08));
+    }
+
+    .qr-slide.slide-review {
+      background: linear-gradient(135deg, rgba(245, 166, 35, 0.12), rgba(233, 69, 96, 0.06));
+    }
+
+    .qr-slide img {
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .qr-slide-text {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .slide-order .qr-slide-text {
+      color: var(--accent);
+    }
+
+    .slide-review .qr-slide-text {
+      color: var(--accent-gold);
+    }
+
+    .sidebar-contact {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+      flex-shrink: 0;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      width: 100%;
+    }
+
+    .sidebar-contact strong {
+      color: var(--accent-gold);
+      text-shadow: 0 0 8px rgba(245, 166, 35, 0.3);
+    }
+
+    /* ── MAIN MENU AREA ── */
+    .menu-area {
+      grid-row: 1 / 2;
+      grid-column: 2 / 3;
+      padding: 16px 22px 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 14px;
+      contain: layout style;
+    }
+
+    .menu-category {
+      background: var(--bg-panel);
+      border-radius: 12px;
+      padding: 12px 16px 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      contain: layout style;
+    }
+
+    .category-header {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 1px;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+      border-bottom: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .category-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: -4px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+
+    .menu-items {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+    }
+
+    /* Rotating pages within a section */
+    .menu-pages {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-page {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      opacity: 0;
+      will-change: opacity;
+      transform: translateZ(0);
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    .menu-page.active {
+      opacity: 1;
+    }
+
+    .page-dots {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      padding-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .page-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      transition: background 0.3s;
+    }
+
+    .page-dot.active {
+      background: var(--accent-gold);
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-dots {
+      flex: 1;
+      border-bottom: 1px dotted rgba(255, 255, 255, 0.15);
+      min-width: 12px;
+      margin-bottom: 4px;
+    }
+
+    .item-price {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--accent-gold);
+      white-space: nowrap;
+    }
+
+    .item-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: -2px;
+      margin-bottom: 1px;
+    }
+
+    /* Family combo — smaller text */
+    .menu-category.family .item-name { font-size: 12px; }
+    .menu-category.family .item-price { font-size: 14px; }
+    .menu-category.family .item-desc { font-size: 9px; }
+
+    /* Compact two-column layout for sides & drinks */
+    .menu-category.compact .menu-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px 12px;
+    }
+
+    .menu-category.compact .item-dots { display: none; }
+    .menu-category.compact .menu-item { gap: 4px; }
+    .menu-category.compact .item-name { font-size: 12px; }
+    .menu-category.compact .item-price { font-size: 14px; }
+
+    .compact-section-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      grid-column: 1 / -1;
+      padding-top: 4px;
+      border-top: 1px solid rgba(233, 69, 96, 0.2);
+      margin-top: 2px;
+    }
+
+    .compact-section-label:first-child {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    /* Category image thumbnail */
+    .cat-thumb {
+      width: 100%;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      flex-shrink: 0;
+    }
+
+    /* ── LOWER THIRDS TICKER ── */
+    .ticker-bar {
+      grid-row: 2 / 3;
+      grid-column: 1 / 3;
+      background: linear-gradient(180deg, #1a0a10 0%, var(--ticker-bg) 40%, var(--ticker-bg) 60%, #0a0a14 100%);
+      border-top: 3px solid var(--accent);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      contain: layout style;
+      box-shadow: 0 -4px 20px rgba(233, 69, 96, 0.3);
+    }
+
+    .ticker-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-gold), var(--accent));
+      box-shadow: 0 0 12px rgba(233, 69, 96, 0.5), 0 0 30px rgba(233, 69, 96, 0.2);
+    }
+
+    .ticker-label {
+      background: linear-gradient(135deg, var(--accent) 0%, #c23152 100%);
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      letter-spacing: 2px;
+      z-index: 2;
+      flex-shrink: 0;
+      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .ticker-label::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), transparent);
+      z-index: 3;
+    }
+
+    .ticker-track {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-content {
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
+      transform: translateZ(0);
+      animation: ticker-scroll 40s linear infinite;
+    }
+
+    .ticker-content span {
+      font-size: 16px;
+      font-weight: 700;
+      padding: 0 35px;
+      color: var(--text);
+      letter-spacing: 0.3px;
+    }
+
+    .ticker-content span strong {
+      color: var(--accent-gold);
+      text-shadow: 0 0 10px rgba(245, 166, 35, 0.4);
+    }
+
+    .ticker-content .dot {
+      color: var(--accent);
+      padding: 0 5px;
+      text-shadow: 0 0 8px rgba(233, 69, 96, 0.5);
+      font-size: 18px;
+    }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0) translateZ(0); }
+      100% { transform: translateX(-50%) translateZ(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="display-grid">
+
+    <!-- ═══════ LEFT SIDEBAR ═══════ -->
+    <aside class="sidebar">
+      <div class="logo-wrapper">
+        <img src="media/logo/logo-1.jpg" alt="Hnina's Seafood Logo">
+      </div>
+      <div class="logo-subtitle">Fresh Seafood &bull; Ocoee, FL</div>
+      <div class="sidebar-divider"></div>
+
+      <div class="special-label">Daily Specials</div>
+
+      <div class="daily-specials" id="dailySpecials">
+        <div class="daily-special-row" data-day="1">
+          <span class="today-arrow">&#9654;</span>
+          <span class="day-label">Mon</span>
+          <div class="special-info">
+            <div class="special-name">10 Garlic Shrimp + Corn &amp; Potato</div>
+            <div class="special-desc">Garlic butter jumbo shrimp combo</div>
+          </div>
+          <span class="special-price">$13</span>
+        </div>
+        <div class="daily-special-row" data-day="2">
+          <span class="today-arrow">&#9654;</span>
+          <span class="day-label">Tue</span>
+          <div class="special-info">
+            <div class="special-name">Snow Crab Cluster Combo</div>
+            <div class="special-desc">w/ Corn, Potato &amp; Sausage</div>
+          </div>
+          <span class="special-price">$20</span>
+        </div>
+        <div class="daily-special-row" data-day="3">
+          <span class="today-arrow">&#9654;</span>
+          <span class="day-label">Wed</span>
+          <div class="special-info">
+            <div class="special-name">Fried Fish Platter (Whiting)</div>
+            <div class="special-desc">Served with french fries</div>
+          </div>
+          <span class="special-price">$9</span>
+        </div>
+        <div class="daily-special-row" data-day="4">
+          <span class="today-arrow">&#9654;</span>
+          <span class="day-label">Thu</span>
+          <div class="special-info">
+            <div class="special-name">3 Lobster Tails Combo</div>
+            <div class="special-desc">w/ Corn &amp; Potato</div>
+          </div>
+          <span class="special-price">$20</span>
+        </div>
+        <div class="daily-special-row" data-day="5">
+          <span class="today-arrow">&#9654;</span>
+          <span class="day-label">Fri</span>
+          <div class="special-info">
+            <div class="special-name">Blue Crab Combo (3 Crabs)</div>
+            <div class="special-desc">w/ Corn, Potato &amp; Sausage</div>
+          </div>
+          <span class="special-price">$38</span>
+        </div>
+        <div class="daily-special-row" data-day="6">
+          <span class="today-arrow">&#9654;</span>
+          <span class="day-label">Sat</span>
+          <div class="special-info">
+            <div class="special-name">2 Snow Crab + 30 Shrimp Feast</div>
+            <div class="special-desc">w/ Corn, Potato &amp; Sausage</div>
+          </div>
+          <span class="special-price">$44</span>
+        </div>
+        <div class="daily-special-row" data-day="0">
+          <span class="today-arrow">&#9654;</span>
+          <span class="day-label">Sun</span>
+          <div class="special-info">
+            <div class="special-name">20 Garlic Shrimp + Corn &amp; Potato</div>
+            <div class="special-desc">Sunday family garlic shrimp deal</div>
+          </div>
+          <span class="special-price">$24</span>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="qr-panel" id="qrPanel">
+        <div class="qr-slide slide-order active">
+          <div class="qr-slide-text">Skip The Line<br>Order Online!</div>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Forder.toasttab.com%2Fonline%2Fhninasseafood&bgcolor=16213e&color=ffffff" alt="Scan to order online" width="140" height="140">
+        </div>
+        <div class="qr-slide slide-review">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwww.facebook.com%2FHninasSeafood%2Freviews&bgcolor=16213e&color=ffffff" alt="Scan to leave a review" width="140" height="140">
+          <div class="qr-slide-text">Scan to Leave<br>a Review!</div>
+        </div>
+      </div>
+
+      <div class="sidebar-contact">
+        <strong>(407) 440-2822</strong><br>
+        1104 S Clarke Rd, Ocoee FL
+      </div>
+    </aside>
+
+    <!-- ═══════ MAIN MENU AREA (4 cols x 2 rows) ═══════ -->
+    <main class="menu-area">
+
+      <!-- ── BUILD A COMBO ── -->
+      <section class="menu-category" id="buildCombo">
+        <div class="category-header">Build A Combo</div>
+        <div class="category-subtitle">All combos served with corn &amp; potatoes</div>
+        <div class="menu-pages" data-rotate="8000">
+          <div class="menu-page active">
+            <div class="menu-item">
+              <span class="item-name">Snow Crab Cluster</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$22</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">3 Lobster Tails</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$22</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">1 lb Crawfish + 10 Jumbo Shrimp</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$32</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Blue Crab Combo (3 Crabs)</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$40</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">3 Cold Water Lobster Tails</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$45</span>
+            </div>
+            <div class="item-desc">Cold water tails in garlic butter &amp; seasoning</div>
+          </div>
+          <div class="menu-page">
+            <div class="menu-item">
+              <span class="item-name">Snow Crab + Lobster Tail</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$32</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">Dungeness Crab Combo</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$45</span>
+            </div>
+            <div class="menu-item">
+              <span class="item-name">King Crab Legs (1 lb)</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$60</span>
+            </div>
+            <div class="item-desc">Premium king crab w/ corn &amp; potato</div>
+            <div class="menu-item">
+              <span class="item-name">Whole Lobster Combo</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$35</span>
+            </div>
+          </div>
+        </div>
+        <div class="page-dots">
+          <span class="page-dot active"></span>
+          <span class="page-dot"></span>
+        </div>
+      </section>
+
+      <!-- ── GARLIC SHRIMP COMBOS ── -->
+      <section class="menu-category">
+        <img class="cat-thumb" src="media/food/482204665_1175274780967780_65374385545676278_n.jpg" alt="Garlic Shrimp">
+        <div class="category-header">Garlic Shrimp Combos</div>
+        <div class="menu-items">
+          <div class="menu-item">
+            <span class="item-name">10 Jumbo Garlic Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$15</span>
+          </div>
+          <div class="item-desc">Served with corn &amp; potato</div>
+          <div class="menu-item">
+            <span class="item-name">20 Jumbo Garlic Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$26</span>
+          </div>
+          <div class="item-desc">Served with corn &amp; potato</div>
+          <div class="menu-item">
+            <span class="item-name">30 Jumbo Garlic Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$35</span>
+          </div>
+          <div class="item-desc">Served with corn &amp; potato</div>
+          <div class="menu-item">
+            <span class="item-name">Salmon Steamed</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$9.99</span>
+          </div>
+          <div class="item-desc">With corn &amp; potato</div>
+        </div>
+      </section>
+
+      <!-- ── FAMILY COMBOS ── -->
+      <section class="menu-category family" id="familyCombos">
+        <div class="category-header">Family Combos</div>
+        <div class="category-subtitle">Perfect for sharing — feeds 2-4</div>
+        <div class="menu-pages" data-rotate="8000">
+          <div class="menu-page active">
+            <div class="menu-item">
+              <span class="item-name">2 Snow Crab + 30 Med Shrimp</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$46</span>
+            </div>
+            <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+            <div class="menu-item">
+              <span class="item-name">2 Snow Crab + 10 Garlic Shrimp</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$45</span>
+            </div>
+            <div class="item-desc">w/ Corn &amp; Potato</div>
+            <div class="menu-item">
+              <span class="item-name">12 Med Crab + 30 Med Shrimp</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$49.99</span>
+            </div>
+            <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+            <div class="menu-item">
+              <span class="item-name">6 Blue Crab + 10 Garlic Shrimp</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$65</span>
+            </div>
+            <div class="item-desc">w/ Corn &amp; Potato</div>
+          </div>
+          <div class="menu-page">
+            <div class="menu-item">
+              <span class="item-name">2 Snow Crab + 1 lb Crawfish</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$55</span>
+            </div>
+            <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+            <div class="menu-item">
+              <span class="item-name">Snow Crab + Lobster + 10 Shrimp</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$58</span>
+            </div>
+            <div class="item-desc">w/ Corn &amp; Potato</div>
+            <div class="menu-item">
+              <span class="item-name">6 Blue Crab + 30 Med Shrimp</span>
+              <span class="item-dots"></span>
+              <span class="item-price">$70</span>
+            </div>
+            <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+          </div>
+        </div>
+        <div class="page-dots">
+          <span class="page-dot active"></span>
+          <span class="page-dot"></span>
+        </div>
+      </section>
+
+      <!-- ── FRIED PLATTERS ── -->
+      <section class="menu-category">
+        <img class="cat-thumb" src="media/food/r772-Hninas-Seafood-meat-2023-04-2.jpg" alt="Fried Seafood">
+        <div class="category-header">Fried Platters</div>
+        <div class="menu-items">
+          <div class="menu-item">
+            <span class="item-name">10 Fried Jumbo Shrimp</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$13</span>
+          </div>
+          <div class="item-desc">Served with french fries</div>
+          <div class="menu-item">
+            <span class="item-name">Fried Fish Platter (Whiting)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$10.99</span>
+          </div>
+          <div class="item-desc">Served with french fries</div>
+          <div class="menu-item">
+            <span class="item-name">Fried Crab Platter</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$14.99</span>
+          </div>
+          <div class="item-desc">Served with french fries</div>
+          <div class="menu-item">
+            <span class="item-name">Fried Tilapia Platter</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$11.99</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Fish &amp; Shrimp Combo</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$13.99</span>
+          </div>
+          <div class="item-desc">Fried whiting + 5 jumbo shrimp w/ fries</div>
+        </div>
+      </section>
+
+      <!-- ── STEAMED SEAFOOD ── -->
+      <section class="menu-category">
+        <img class="cat-thumb" src="media/food/rf31-Hninas-Seafood-meat-2023-04-4.jpg" alt="Steamed Seafood">
+        <div class="category-header">Steamed Seafood</div>
+        <div class="menu-items">
+          <div class="menu-item">
+            <span class="item-name">Steamed Shrimp (1 lb)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$14</span>
+          </div>
+          <div class="item-desc">Old bay seasoned w/ corn &amp; potato</div>
+          <div class="menu-item">
+            <span class="item-name">Steamed Snow Crab (1 Cluster)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$22</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Steamed Blue Crab (6 pcs)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$40</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Crawfish (1 lb)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$12</span>
+          </div>
+          <div class="item-desc">Seasoned w/ corn &amp; potato</div>
+        </div>
+      </section>
+
+      <!-- ── SEAFOOD BY THE POUND ── -->
+      <section class="menu-category">
+        <img class="cat-thumb" src="media/food/503_516075355.jpg" alt="Seafood By The Pound">
+        <div class="category-header">Seafood by the Pound</div>
+        <div class="menu-items">
+          <div class="menu-item">
+            <span class="item-name">Snow Crab Legs</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$22/lb</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Blue Crab (Live)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$12/lb</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Jumbo Shrimp (Head-On)</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$14/lb</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Crawfish</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$10/lb</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">King Crab Legs</span>
+            <span class="item-dots"></span>
+            <span class="item-price">$55/lb</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SIDES & DRINKS (combined compact) ── -->
+      <section class="menu-category compact">
+        <div class="category-header">Sides &amp; Drinks</div>
+        <div class="menu-items">
+          <div class="compact-section-label">Side Orders</div>
+          <div class="menu-item">
+            <span class="item-name">French Fries</span>
+            <span class="item-price">$2.29</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Corn</span>
+            <span class="item-price">$0.99</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Corn &amp; Potato</span>
+            <span class="item-price">$2.99</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Hush Puppies</span>
+            <span class="item-price">$2.50</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Smoked Sausage</span>
+            <span class="item-price">$3.00</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Garlic Egg</span>
+            <span class="item-price">$0.79</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Extra Butter Sauce</span>
+            <span class="item-price">$1.50</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Coleslaw</span>
+            <span class="item-price">$1.99</span>
+          </div>
+          <div class="compact-section-label">Drinks</div>
+          <div class="menu-item">
+            <span class="item-name">Fountain Drink</span>
+            <span class="item-price">$1.99</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Bottled Water</span>
+            <span class="item-price">$1.50</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Can Soda</span>
+            <span class="item-price">$1.50</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Juice</span>
+            <span class="item-price">$2.50</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── EXTRAS / ADD-ONS ── -->
+      <section class="menu-category compact">
+        <div class="category-header">Extras &amp; Add-Ons</div>
+        <div class="menu-items">
+          <div class="menu-item">
+            <span class="item-name">Extra Shrimp (5 pcs)</span>
+            <span class="item-price">$5.00</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Extra Crab Cluster</span>
+            <span class="item-price">$12.00</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Extra Lobster Tail</span>
+            <span class="item-price">$8.00</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Extra Sausage</span>
+            <span class="item-price">$2.00</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Extra Corn</span>
+            <span class="item-price">$0.99</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Extra Potato</span>
+            <span class="item-price">$0.99</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Garlic Butter Dip</span>
+            <span class="item-price">$1.50</span>
+          </div>
+          <div class="menu-item">
+            <span class="item-name">Cajun Seasoning</span>
+            <span class="item-price">$0.50</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ═══════ LOWER THIRDS TICKER ═══════ -->
+    <footer class="ticker-bar">
+      <div class="ticker-label">Now Serving</div>
+      <div class="ticker-track">
+        <div class="ticker-content">
+          <span><strong>Hours:</strong> Mon-Sat 11AM-8PM &bull; Sun 12PM-5PM</span>
+          <span class="dot">&bull;</span>
+          <span>Follow us <strong>@HninasSeafood</strong> on Facebook</span>
+          <span class="dot">&bull;</span>
+          <span>Add extra <strong>garlic butter</strong> to any boil!</span>
+          <span class="dot">&bull;</span>
+          <span><strong>Live Blue Crabs</strong> Available Daily!</span>
+          <span class="dot">&bull;</span>
+          <span>Order Online at <strong>order.toasttab.com</strong></span>
+          <span class="dot">&bull;</span>
+          <span>Call us: <strong>(407) 440-2822</strong></span>
+          <span class="dot">&bull;</span>
+          <!-- Duplicate for seamless loop -->
+          <span><strong>Hours:</strong> Mon-Sat 11AM-8PM &bull; Sun 12PM-5PM</span>
+          <span class="dot">&bull;</span>
+          <span>Follow us <strong>@HninasSeafood</strong> on Facebook</span>
+          <span class="dot">&bull;</span>
+          <span>Add extra <strong>garlic butter</strong> to any boil!</span>
+          <span class="dot">&bull;</span>
+          <span><strong>Live Blue Crabs</strong> Available Daily!</span>
+          <span class="dot">&bull;</span>
+          <span>Order Online at <strong>order.toasttab.com</strong></span>
+          <span class="dot">&bull;</span>
+          <span>Call us: <strong>(407) 440-2822</strong></span>
+          <span class="dot">&bull;</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ═══════ JAVASCRIPT ═══════ -->
+  <script>
+    // ── Highlight today's special ──
+    (function () {
+      var today = new Date().getDay(); // 0=Sun, 1=Mon, ... 6=Sat
+      var rows = document.querySelectorAll('.daily-special-row');
+      rows.forEach(function (row) {
+        if (parseInt(row.getAttribute('data-day'), 10) === today) {
+          row.classList.add('today');
+        }
+      });
+    })();
+
+    // ── Rotate QR slides every 5s (requestAnimationFrame) ──
+    (function () {
+      var slides = document.querySelectorAll('#qrPanel .qr-slide');
+      var current = 0;
+      if (slides.length < 2) return;
+      var interval = 5000;
+      var startTime = performance.now();
+
+      function tick(now) {
+        if (now - startTime >= interval) {
+          slides[current].classList.remove('active');
+          current = (current + 1) % slides.length;
+          slides[current].classList.add('active');
+          startTime = now;
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    // ── Rotate menu pages within sections (requestAnimationFrame) ──
+    (function () {
+      var containers = document.querySelectorAll('.menu-pages');
+      containers.forEach(function (container) {
+        var pages = container.querySelectorAll('.menu-page');
+        if (pages.length < 2) return;
+
+        var section = container.closest('.menu-category');
+        var dots = section ? section.querySelectorAll('.page-dot') : [];
+        var interval = parseInt(container.getAttribute('data-rotate'), 10) || 8000;
+        var current = 0;
+        var startTime = performance.now();
+
+        function tick(now) {
+          if (now - startTime >= interval) {
+            pages[current].classList.remove('active');
+            if (dots[current]) dots[current].classList.remove('active');
+            current = (current + 1) % pages.length;
+            pages[current].classList.add('active');
+            if (dots[current]) dots[current].classList.add('active');
+            startTime = now;
+          }
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    })();
+    // ── Auto-scale to fit any viewport ──
+    (function () {
+      var grid = document.querySelector('.display-grid');
+      function scaleToFit() {
+        var sx = window.innerWidth / 1920;
+        var sy = window.innerHeight / 1080;
+        var s = Math.min(sx, sy);
+        grid.style.transform = 'scale(' + s + ')';
+      }
+      scaleToFit();
+      window.addEventListener('resize', scaleToFit);
+    })();
+  </script>
+</body>
+</html>

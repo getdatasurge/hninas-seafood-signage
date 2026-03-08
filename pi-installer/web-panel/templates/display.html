@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Display Settings - Hnina's Signage{% endblock %}
+{% block content %}
+<h1 class="page-title">Display Settings</h1>
+
+<div class="card">
+  <div class="card-title">Display Type</div>
+  <form method="POST">
+    <input type="hidden" name="action" value="change_display">
+    <div class="radio-cards">
+      <label class="radio-card">
+        <input type="radio" name="display_type" value="main-menu-screen"
+          {% if config.display_type == 'main-menu-screen' %}checked{% endif %}>
+        <div class="radio-card-content">
+          <div class="radio-card-title">Main Menu Screen</div>
+          <div class="radio-card-desc">Left sidebar with daily specials &amp; QR codes, 4x2 menu grid, scrolling ticker</div>
+        </div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="display_type" value="2-column-menu-screen"
+          {% if config.display_type == '2-column-menu-screen' %}checked{% endif %}>
+        <div class="radio-card-content">
+          <div class="radio-card-title">Two-Column Rotating</div>
+          <div class="radio-card-desc">Header bar, two rotating menu columns with countdown timers, scrolling ticker</div>
+        </div>
+      </label>
+    </div>
+    <div class="mt-2">
+      <button type="submit" class="btn btn-primary">Save &amp; Apply</button>
+      <a href="/control/restart" class="btn btn-gold btn-sm" style="margin-left:8px">Restart Display</a>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <div class="card-title">Display Schedule</div>
+  <form method="POST">
+    <input type="hidden" name="action" value="update_schedule">
+
+    <div class="toggle-row">
+      <label class="toggle" style="margin-bottom:0">
+        <input type="checkbox" name="schedule_enabled" id="schedToggle"
+          {% if config.schedule_enabled %}checked{% endif %}
+          onchange="document.getElementById('schedFields').style.display = this.checked ? 'block' : 'none'">
+        <span class="toggle-slider"></span>
+      </label>
+      <span style="font-size:14px">Enable daily schedule</span>
+    </div>
+
+    <div id="schedFields" style="display:{% if config.schedule_enabled %}block{% else %}none{% endif %}">
+      <div class="grid-2">
+        <div>
+          <label for="schedule_on">Display ON time</label>
+          <input type="time" name="schedule_on" id="schedule_on"
+            value="{{ config.schedule_on }}">
+        </div>
+        <div>
+          <label for="schedule_off">Display OFF time</label>
+          <input type="time" name="schedule_off" id="schedule_off"
+            value="{{ config.schedule_off }}">
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px">
+        When off, the browser closes and the TV handles power saving.
+      </p>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Schedule</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}File Manager - Hnina's Signage{% endblock %}
+{% block content %}
+<h1 class="page-title">File Manager</h1>
+
+<div class="card">
+  <div class="card-title">Upload Files</div>
+  <form method="POST" enctype="multipart/form-data">
+    <label for="target_display">Target Display</label>
+    <select name="target_display" id="target_display">
+      <option value="main-menu-screen" {% if config.display_type == 'main-menu-screen' %}selected{% endif %}>Main Menu Screen</option>
+      <option value="2-column-menu-screen" {% if config.display_type == '2-column-menu-screen' %}selected{% endif %}>Two-Column Rotating</option>
+    </select>
+
+    <div class="grid-2">
+      <div>
+        <label for="html_file">Replace Display HTML (.html)</label>
+        <input type="file" name="html_file" id="html_file" accept=".html">
+      </div>
+      <div>
+        <label for="logo_file">Upload Logo (.jpg, .png)</label>
+        <input type="file" name="logo_file" id="logo_file" accept=".jpg,.jpeg,.png">
+      </div>
+    </div>
+
+    <label for="image_files">Upload Food Images (.jpg, .png, .webp)</label>
+    <input type="file" name="image_files" id="image_files" accept=".jpg,.jpeg,.png,.webp" multiple>
+
+    <div class="mt-2 gap-sm">
+      <button type="submit" class="btn btn-primary">Upload</button>
+      <a href="/control/restart" class="btn btn-gold btn-sm">Restart Display After Upload</a>
+    </div>
+  </form>
+</div>
+
+{% for display_name, file_list in files.items() %}
+<div class="card">
+  <div class="card-title">{{ display_name }} {% if display_name == config.display_type %}<span class="badge badge-running" style="font-size:10px">ACTIVE</span>{% endif %}</div>
+  {% if file_list %}
+  <div class="file-list">
+    {% for f in file_list %}
+    <div class="file-item">
+      <span class="file-name">{{ f.path }}</span>
+      <span class="file-size">{{ "%.1f"|format(f.size / 1024) }} KB</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p style="color:var(--text-muted);font-size:13px">No files found</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endblock %}

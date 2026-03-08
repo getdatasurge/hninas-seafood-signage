@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hnina's Seafood — Menu Grid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #1a1a2e;
+      --bg-panel: #16213e;
+      --accent: #e94560;
+      --accent-gold: #f5a623;
+      --text: #ffffff;
+      --text-muted: #b0b8c8;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .menu-area {
+      width: 100vw;
+      height: 100vh;
+      padding: 16px 22px 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 14px;
+      contain: layout style;
+    }
+
+    .menu-category {
+      background: var(--bg-panel);
+      border-radius: 12px;
+      padding: 12px 16px 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      contain: content;
+    }
+
+    .category-header {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 1px;
+      padding-bottom: 6px;
+      margin-bottom: 6px;
+      border-bottom: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .category-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: -4px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+
+    .menu-items {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+    }
+
+    .menu-pages {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      contain: layout;
+    }
+
+    .menu-page {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      opacity: 0;
+      will-change: opacity;
+      transform: translateZ(0);
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    .menu-page.active { opacity: 1; }
+
+    .page-dots {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      padding-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .page-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .page-dot.active { background: var(--accent-gold); }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-dots {
+      flex: 1;
+      border-bottom: 1px dotted rgba(255, 255, 255, 0.15);
+      min-width: 12px;
+      margin-bottom: 4px;
+    }
+
+    .item-price {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--accent-gold);
+      white-space: nowrap;
+    }
+
+    .item-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: -2px;
+      margin-bottom: 1px;
+    }
+
+    .menu-category.family .item-name { font-size: 12px; }
+    .menu-category.family .item-price { font-size: 14px; }
+    .menu-category.family .item-desc { font-size: 9px; }
+
+    .menu-category.compact .menu-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px 12px;
+    }
+
+    .menu-category.compact .item-dots { display: none; }
+    .menu-category.compact .menu-item { gap: 4px; }
+    .menu-category.compact .item-name { font-size: 12px; }
+    .menu-category.compact .item-price { font-size: 14px; }
+
+    .compact-section-label {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      grid-column: 1 / -1;
+      padding-top: 4px;
+      border-top: 1px solid rgba(233, 69, 96, 0.2);
+      margin-top: 2px;
+    }
+
+    .compact-section-label:first-child {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .cat-thumb {
+      width: 100%;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="menu-area">
+
+    <!-- Build A Combo -->
+    <section class="menu-category" id="buildCombo">
+      <div class="category-header">Build A Combo</div>
+      <div class="category-subtitle">All combos served with corn &amp; potatoes</div>
+      <div class="menu-pages" data-rotate="8000">
+        <div class="menu-page active">
+          <div class="menu-item"><span class="item-name">Snow Crab Cluster</span><span class="item-dots"></span><span class="item-price">$22</span></div>
+          <div class="menu-item"><span class="item-name">3 Lobster Tails</span><span class="item-dots"></span><span class="item-price">$22</span></div>
+          <div class="menu-item"><span class="item-name">1 lb Crawfish + 10 Jumbo Shrimp</span><span class="item-dots"></span><span class="item-price">$32</span></div>
+          <div class="menu-item"><span class="item-name">Blue Crab Combo (3 Crabs)</span><span class="item-dots"></span><span class="item-price">$40</span></div>
+          <div class="menu-item"><span class="item-name">3 Cold Water Lobster Tails</span><span class="item-dots"></span><span class="item-price">$45</span></div>
+          <div class="item-desc">Cold water tails in garlic butter &amp; seasoning</div>
+        </div>
+        <div class="menu-page">
+          <div class="menu-item"><span class="item-name">Snow Crab + Lobster Tail</span><span class="item-dots"></span><span class="item-price">$32</span></div>
+          <div class="menu-item"><span class="item-name">Dungeness Crab Combo</span><span class="item-dots"></span><span class="item-price">$45</span></div>
+          <div class="menu-item"><span class="item-name">King Crab Legs (1 lb)</span><span class="item-dots"></span><span class="item-price">$60</span></div>
+          <div class="item-desc">Premium king crab w/ corn &amp; potato</div>
+          <div class="menu-item"><span class="item-name">Whole Lobster Combo</span><span class="item-dots"></span><span class="item-price">$35</span></div>
+        </div>
+      </div>
+      <div class="page-dots"><span class="page-dot active"></span><span class="page-dot"></span></div>
+    </section>
+
+    <!-- Garlic Shrimp Combos -->
+    <section class="menu-category">
+      <img class="cat-thumb" src="media/food/482204665_1175274780967780_65374385545676278_n.jpg" alt="Garlic Shrimp" width="370" height="70">
+      <div class="category-header">Garlic Shrimp Combos</div>
+      <div class="menu-items">
+        <div class="menu-item"><span class="item-name">10 Jumbo Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$15</span></div>
+        <div class="item-desc">Served with corn &amp; potato</div>
+        <div class="menu-item"><span class="item-name">20 Jumbo Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$26</span></div>
+        <div class="item-desc">Served with corn &amp; potato</div>
+        <div class="menu-item"><span class="item-name">30 Jumbo Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$35</span></div>
+        <div class="item-desc">Served with corn &amp; potato</div>
+        <div class="menu-item"><span class="item-name">Salmon Steamed</span><span class="item-dots"></span><span class="item-price">$9.99</span></div>
+        <div class="item-desc">With corn &amp; potato</div>
+      </div>
+    </section>
+
+    <!-- Family Combos -->
+    <section class="menu-category family" id="familyCombos">
+      <div class="category-header">Family Combos</div>
+      <div class="category-subtitle">Perfect for sharing — feeds 2-4</div>
+      <div class="menu-pages" data-rotate="8000">
+        <div class="menu-page active">
+          <div class="menu-item"><span class="item-name">2 Snow Crab + 30 Med Shrimp</span><span class="item-dots"></span><span class="item-price">$46</span></div>
+          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+          <div class="menu-item"><span class="item-name">2 Snow Crab + 10 Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$45</span></div>
+          <div class="item-desc">w/ Corn &amp; Potato</div>
+          <div class="menu-item"><span class="item-name">12 Med Crab + 30 Med Shrimp</span><span class="item-dots"></span><span class="item-price">$49.99</span></div>
+          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+          <div class="menu-item"><span class="item-name">6 Blue Crab + 10 Garlic Shrimp</span><span class="item-dots"></span><span class="item-price">$65</span></div>
+          <div class="item-desc">w/ Corn &amp; Potato</div>
+        </div>
+        <div class="menu-page">
+          <div class="menu-item"><span class="item-name">2 Snow Crab + 1 lb Crawfish</span><span class="item-dots"></span><span class="item-price">$55</span></div>
+          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+          <div class="menu-item"><span class="item-name">Snow Crab + Lobster + 10 Shrimp</span><span class="item-dots"></span><span class="item-price">$58</span></div>
+          <div class="item-desc">w/ Corn &amp; Potato</div>
+          <div class="menu-item"><span class="item-name">6 Blue Crab + 30 Med Shrimp</span><span class="item-dots"></span><span class="item-price">$70</span></div>
+          <div class="item-desc">w/ Corn, Potato &amp; Sausage</div>
+        </div>
+      </div>
+      <div class="page-dots"><span class="page-dot active"></span><span class="page-dot"></span></div>
+    </section>
+
+    <!-- Fried Platters -->
+    <section class="menu-category">
+      <img class="cat-thumb" src="media/food/r772-Hninas-Seafood-meat-2023-04-2.jpg" alt="Fried Seafood" width="370" height="70">
+      <div class="category-header">Fried Platters</div>
+      <div class="menu-items">
+        <div class="menu-item"><span class="item-name">10 Fried Jumbo Shrimp</span><span class="item-dots"></span><span class="item-price">$13</span></div>
+        <div class="item-desc">Served with french fries</div>
+        <div class="menu-item"><span class="item-name">Fried Fish Platter (Whiting)</span><span class="item-dots"></span><span class="item-price">$10.99</span></div>
+        <div class="item-desc">Served with french fries</div>
+        <div class="menu-item"><span class="item-name">Fried Crab Platter</span><span class="item-dots"></span><span class="item-price">$14.99</span></div>
+        <div class="item-desc">Served with french fries</div>
+        <div class="menu-item"><span class="item-name">Fried Tilapia Platter</span><span class="item-dots"></span><span class="item-price">$11.99</span></div>
+        <div class="menu-item"><span class="item-name">Fish &amp; Shrimp Combo</span><span class="item-dots"></span><span class="item-price">$13.99</span></div>
+        <div class="item-desc">Fried whiting + 5 jumbo shrimp w/ fries</div>
+      </div>
+    </section>
+
+    <!-- Steamed Seafood -->
+    <section class="menu-category">
+      <img class="cat-thumb" src="media/food/rf31-Hninas-Seafood-meat-2023-04-4.jpg" alt="Steamed Seafood" width="370" height="70">
+      <div class="category-header">Steamed Seafood</div>
+      <div class="menu-items">
+        <div class="menu-item"><span class="item-name">Steamed Shrimp (1 lb)</span><span class="item-dots"></span><span class="item-price">$14</span></div>
+        <div class="item-desc">Old bay seasoned w/ corn &amp; potato</div>
+        <div class="menu-item"><span class="item-name">Steamed Snow Crab (1 Cluster)</span><span class="item-dots"></span><span class="item-price">$22</span></div>
+        <div class="menu-item"><span class="item-name">Steamed Blue Crab (6 pcs)</span><span class="item-dots"></span><span class="item-price">$40</span></div>
+        <div class="menu-item"><span class="item-name">Crawfish (1 lb)</span><span class="item-dots"></span><span class="item-price">$12</span></div>
+        <div class="item-desc">Seasoned w/ corn &amp; potato</div>
+      </div>
+    </section>
+
+    <!-- Seafood by the Pound -->
+    <section class="menu-category">
+      <img class="cat-thumb" src="media/food/503_516075355.jpg" alt="Seafood By The Pound" width="370" height="70">
+      <div class="category-header">Seafood by the Pound</div>
+      <div class="menu-items">
+        <div class="menu-item"><span class="item-name">Snow Crab Legs</span><span class="item-dots"></span><span class="item-price">$22/lb</span></div>
+        <div class="menu-item"><span class="item-name">Blue Crab (Live)</span><span class="item-dots"></span><span class="item-price">$12/lb</span></div>
+        <div class="menu-item"><span class="item-name">Jumbo Shrimp (Head-On)</span><span class="item-dots"></span><span class="item-price">$14/lb</span></div>
+        <div class="menu-item"><span class="item-name">Crawfish</span><span class="item-dots"></span><span class="item-price">$10/lb</span></div>
+        <div class="menu-item"><span class="item-name">King Crab Legs</span><span class="item-dots"></span><span class="item-price">$55/lb</span></div>
+      </div>
+    </section>
+
+    <!-- Sides & Drinks -->
+    <section class="menu-category compact">
+      <div class="category-header">Sides &amp; Drinks</div>
+      <div class="menu-items">
+        <div class="compact-section-label">Side Orders</div>
+        <div class="menu-item"><span class="item-name">French Fries</span><span class="item-price">$2.29</span></div>
+        <div class="menu-item"><span class="item-name">Corn</span><span class="item-price">$0.99</span></div>
+        <div class="menu-item"><span class="item-name">Corn &amp; Potato</span><span class="item-price">$2.99</span></div>
+        <div class="menu-item"><span class="item-name">Hush Puppies</span><span class="item-price">$2.50</span></div>
+        <div class="menu-item"><span class="item-name">Smoked Sausage</span><span class="item-price">$3.00</span></div>
+        <div class="menu-item"><span class="item-name">Garlic Egg</span><span class="item-price">$0.79</span></div>
+        <div class="menu-item"><span class="item-name">Extra Butter Sauce</span><span class="item-price">$1.50</span></div>
+        <div class="menu-item"><span class="item-name">Coleslaw</span><span class="item-price">$1.99</span></div>
+        <div class="compact-section-label">Drinks</div>
+        <div class="menu-item"><span class="item-name">Fountain Drink</span><span class="item-price">$1.99</span></div>
+        <div class="menu-item"><span class="item-name">Bottled Water</span><span class="item-price">$1.50</span></div>
+        <div class="menu-item"><span class="item-name">Can Soda</span><span class="item-price">$1.50</span></div>
+        <div class="menu-item"><span class="item-name">Juice</span><span class="item-price">$2.50</span></div>
+      </div>
+    </section>
+
+    <!-- Extras & Add-Ons -->
+    <section class="menu-category compact">
+      <div class="category-header">Extras &amp; Add-Ons</div>
+      <div class="menu-items">
+        <div class="menu-item"><span class="item-name">Extra Shrimp (5 pcs)</span><span class="item-price">$5.00</span></div>
+        <div class="menu-item"><span class="item-name">Extra Crab Cluster</span><span class="item-price">$12.00</span></div>
+        <div class="menu-item"><span class="item-name">Extra Lobster Tail</span><span class="item-price">$8.00</span></div>
+        <div class="menu-item"><span class="item-name">Extra Sausage</span><span class="item-price">$2.00</span></div>
+        <div class="menu-item"><span class="item-name">Extra Corn</span><span class="item-price">$0.99</span></div>
+        <div class="menu-item"><span class="item-name">Extra Potato</span><span class="item-price">$0.99</span></div>
+        <div class="menu-item"><span class="item-name">Garlic Butter Dip</span><span class="item-price">$1.50</span></div>
+        <div class="menu-item"><span class="item-name">Cajun Seasoning</span><span class="item-price">$0.50</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Rotate menu pages using requestAnimationFrame
+    (function () {
+      var containers = document.querySelectorAll('.menu-pages');
+      for (var c = 0; c < containers.length; c++) {
+        (function (container) {
+          var pages = container.querySelectorAll('.menu-page');
+          if (pages.length < 2) return;
+
+          var section = container.closest('.menu-category');
+          var dots = section ? section.querySelectorAll('.page-dot') : [];
+          var interval = parseInt(container.getAttribute('data-rotate'), 10) || 8000;
+          var current = 0;
+          var last = performance.now();
+
+          function tick(now) {
+            if (now - last >= interval) {
+              pages[current].classList.remove('active');
+              if (dots[current]) dots[current].classList.remove('active');
+              current = (current + 1) % pages.length;
+              pages[current].classList.add('active');
+              if (dots[current]) dots[current].classList.add('active');
+              last = now;
+            }
+            requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        })(containers[c]);
+      }
+    })();
+  </script>
+</body>
+</html>

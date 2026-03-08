@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Hnina's Signage{% endblock %}
+{% block content %}
+<h1 class="page-title">Dashboard</h1>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">Display Status</div>
+    <div class="info-row">
+      <span class="info-label">Status</span>
+      <span class="badge {% if status == 'running' %}badge-running{% else %}badge-stopped{% endif %}">
+        {{ status | upper }}
+      </span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Display Type</span>
+      <span class="info-value">{{ config.display_type }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Schedule</span>
+      <span class="info-value">
+        {% if config.schedule_enabled %}
+          {{ config.schedule_on }} - {{ config.schedule_off }}
+        {% else %}
+          24/7 (Always On)
+        {% endif %}
+      </span>
+    </div>
+    <div class="mt-2 gap-sm">
+      {% if status == 'running' %}
+        <a href="/control/restart" class="btn btn-primary btn-sm">Restart</a>
+        <a href="/control/stop" class="btn btn-danger btn-sm">Stop</a>
+      {% else %}
+        <a href="/control/start" class="btn btn-success btn-sm">Start</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">System Info</div>
+    <div class="info-row">
+      <span class="info-label">IP Address</span>
+      <span class="info-value">{{ sys_info.ip }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Hostname</span>
+      <span class="info-value">{{ sys_info.hostname }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Uptime</span>
+      <span class="info-value">{{ sys_info.uptime }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Temperature</span>
+      <span class="info-value">{{ sys_info.temp }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Memory</span>
+      <span class="info-value">{{ sys_info.memory }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Disk</span>
+      <span class="info-value">{{ sys_info.disk }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">WiFi</span>
+      <span class="info-value">{{ sys_info.wifi }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Quick Actions</div>
+  <div class="gap-sm">
+    <a href="/display" class="btn btn-primary btn-sm">Change Display</a>
+    <a href="/files" class="btn btn-gold btn-sm">Upload Files</a>
+    <a href="/control/restart" class="btn btn-primary btn-sm">Restart Display</a>
+    <a href="/control/reboot" class="btn btn-danger btn-sm" onclick="return confirm('Reboot the Raspberry Pi?')">Reboot Pi</a>
+  </div>
+</div>
+{% endblock %}
