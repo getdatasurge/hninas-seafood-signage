@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,height=1080">
+<title>Screen 1 - Layout Structure</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#111;font-family:sans-serif;}
+
+.display-grid{
+  width:1920px;height:1080px;transform-origin:0 0;
+  display:flex;flex-direction:column;position:absolute;top:0;left:0;
+  contain:layout style;will-change:transform;
+  background:
+    repeating-linear-gradient(180deg,rgba(170,155,130,0.05) 0px,transparent 1px,transparent 5px,rgba(170,155,130,0.03) 6px,transparent 7px,transparent 16px),
+    repeating-linear-gradient(180deg,transparent 0px,transparent 138px,rgba(150,130,100,0.1) 138px,rgba(150,130,100,0.13) 140px),
+    repeating-linear-gradient(90deg,transparent 0px,transparent 478px,rgba(140,120,90,0.06) 478px,rgba(140,120,90,0.06) 480px),
+    linear-gradient(180deg,#ede5d8,#e4dace,#ebe3d6);
+}
+
+/* ── TOP TICKER ── */
+.top-ticker{height:30px;background:#1a3a5c;flex-shrink:0;}
+
+/* ── HEADER ── */
+.header{height:90px;flex-shrink:0;}
+
+/* ── CATEGORY INDICATOR ── */
+.cat-indicator{height:32px;flex-shrink:0;background:rgba(26,58,92,0.06);border-bottom:1px solid rgba(201,169,110,0.3);}
+
+/* ── MAIN ── */
+.main-content{flex:1;display:grid;grid-template-columns:290px 1fr 1fr 1fr;gap:10px;padding:6px 12px;overflow:hidden;min-height:0;}
+
+/* ── OUTER CARD ── */
+.menu-card{background:rgba(255,255,255,0.92);border-radius:10px;border:4px solid #c9a96e;box-shadow:inset 0 0 0 2px rgba(160,128,80,0.2),0 2px 8px rgba(0,0,0,0.1);overflow:hidden;}
+
+/* ── COL 1: DAILY SPECIALS ── */
+.col-specials{
+  background:repeating-linear-gradient(transparent,transparent 24px,rgba(180,160,120,0.12) 24px,rgba(180,160,120,0.12) 25px),linear-gradient(180deg,#f5e6c8,#f0dfc0);
+  border-color:#b89850;
+}
+
+/* ── FOOTER ── */
+.footer{height:48px;background:#1a3a5c;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="display-grid">
+
+<!-- TOP TICKER -->
+<div class="top-ticker"></div>
+
+<!-- HEADER -->
+<div class="header"></div>
+
+<!-- CATEGORY INDICATOR -->
+<div class="cat-indicator"></div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+<!-- COL 1: DAILY SPECIALS -->
+<div class="menu-card col-specials"></div>
+
+<!-- COL 2 -->
+<div class="menu-card"></div>
+
+<!-- COL 3 -->
+<div class="menu-card"></div>
+
+<!-- COL 4 -->
+<div class="menu-card"></div>
+
+</div><!-- /main-content -->
+
+<!-- FOOTER -->
+<div class="footer"></div>
+
+</div><!-- /display-grid -->
+
+<script>
+(function(){
+  var grid = document.querySelector('.display-grid');
+  function scaleToFit() {
+    var s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    grid.style.transform = 'scale(' + s + ')';
+  }
+  scaleToFit();
+  window.addEventListener('resize', scaleToFit);
+})();
+</script>
+</body>
+</html>
